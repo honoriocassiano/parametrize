@@ -9,8 +9,8 @@
 
 namespace param {
 
-Triangle::Triangle(Point* p1, Point* p2, Point* p3) :
-		points( { p1, p2, p3 }) {
+Triangle::Triangle(glm::vec3* p1, glm::vec3* p2, glm::vec3* p3) :
+		points({  p1, p2, p3 }) {
 }
 
 Triangle::~Triangle() {

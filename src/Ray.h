@@ -8,18 +8,18 @@
 #ifndef SRC_RAY_H_
 #define SRC_RAY_H_
 
-#include "Vector.h"
+#include <glm/vec3.hpp>
 
 namespace param {
 
 class Ray {
 public:
-	Ray(const Point& origin, const Vector& direction);
+	Ray(const glm::vec3& origin, const glm::vec3& direction);
 	virtual ~Ray();
 
 private:
-	Point orig;
-	Vector dir;
+	glm::vec3 orig;
+	glm::vec3 dir;
 };
 
 } /* namespace param */

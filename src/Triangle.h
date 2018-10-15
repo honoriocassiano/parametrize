@@ -8,19 +8,18 @@
 #ifndef SRC_TRIANGLE_H_
 #define SRC_TRIANGLE_H_
 
-#include "Point.h"
 #include <array>
+#include <glm/vec3.hpp>
 
 namespace param {
 
 class Triangle {
 public:
-	Triangle(Point* p1, Point* p2, Point* p3,);
+	Triangle(glm::vec3* p1, glm::vec3* p2, glm::vec3* p3);
 	virtual ~Triangle();
 
 private:
-	std::array<Point*, 3> points;
-
+	glm::vec3* points[3];
 };
 
 } /* namespace param */

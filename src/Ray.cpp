@@ -9,7 +9,7 @@
 
 namespace param {
 
-Ray::Ray(const Point& _origin, const Vector& _direction) :
+Ray::Ray(const glm::vec3& _origin, const glm::vec3& _direction) :
 		orig(_origin), dir(_direction) {
 }
 
