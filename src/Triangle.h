@@ -18,8 +18,10 @@ public:
 	Triangle(glm::vec3* p1, glm::vec3* p2, glm::vec3* p3);
 	virtual ~Triangle();
 
+	const std::array<glm::vec3*, 3>& get() const;
+
 private:
-	glm::vec3* points[3];
+	std::array<glm::vec3*, 3> points;
 };
 
 } /* namespace param */
