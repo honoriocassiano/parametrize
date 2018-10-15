@@ -22,6 +22,8 @@ public:
 	bool Intersect(const Triangle* triangle) const;
 	float GetIntersectionDistance(const Triangle* triangle) const;
 
+	glm::vec3 GetDir() const;
+
 private:
 	glm::vec3 orig;
 	glm::vec3 dir;

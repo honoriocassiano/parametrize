@@ -7,17 +7,25 @@
 
 #include "Triangle.h"
 
+#include <glm/geometric.hpp>
+
 namespace param {
 
 Triangle::Triangle(glm::vec3* p1, glm::vec3* p2, glm::vec3* p3) :
 		points( { p1, p2, p3 }) {
+
+	normal = glm::normalize(glm::cross(*p2 - *p1, *p3 - *p1));
 }
 
 Triangle::~Triangle() {
 }
 
-const std::array<glm::vec3*, 3>& Triangle::get() const {
+const std::array<glm::vec3*, 3>& Triangle::Get() const {
 	return points;
+}
+
+const glm::vec3 Triangle::GetNormal() const {
+	return normal;
 }
 
 } /* namespace param */
