@@ -14,7 +14,7 @@
 namespace param {
 
 Ray::Ray(const glm::vec3& _origin, const glm::vec3& _direction) :
-		orig(_origin), dir(_direction) {
+		orig(_origin), dir(glm::normalize(_direction)) {
 }
 
 Ray::~Ray() {
@@ -55,6 +55,17 @@ bool Ray::Intersect(const Triangle* triangle) const {
 	}
 
 	return true;
+}
+
+float Ray::GetIntersectionDistance(const Triangle* triangle) const {
+
+	auto points = triangle->get();
+
+	auto normal = glm::cross(*points[1] - *points[0], *points[2] - *points[0]);
+
+	return glm::dot((*points[0] - orig), normal) / glm::dot(dir, normal);
+
+//	return ((d * dir) + orig);
 }
 
 } /* namespace param */

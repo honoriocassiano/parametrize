@@ -21,8 +21,8 @@ pkg_search_module(GLFW REQUIRED glfw3)
 include_directories(${GLFW_INCLUDE_DIRS} ${OPENGL_INCLUDE_DIR} ${GLM_INCLUDE_DIRS})
 
 
-add_executable(picking ${SOURCE_FILES})
+add_executable(parametrize ${SOURCE_FILES})
 
 # set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
-target_link_libraries(picking ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES})
+target_link_libraries(parametrize ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES})
