@@ -69,6 +69,11 @@ float Ray::GetIntersectionDistance(const Triangle* triangle) const {
 //	return ((d * dir) + orig);
 }
 
+void Ray::Set(const glm::vec3& origin, const glm::vec3& direction) {
+	orig = origin;
+	dir = direction;
+}
+
 glm::vec3 Ray::GetDir() const {
 	return dir;
 }

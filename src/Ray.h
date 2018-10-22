@@ -19,6 +19,8 @@ public:
 	Ray(const glm::vec3& origin, const glm::vec3& direction);
 	virtual ~Ray();
 
+	void Set(const glm::vec3& origin, const glm::vec3& direction);
+
 	bool Intersect(const Triangle* triangle) const;
 	float GetIntersectionDistance(const Triangle* triangle) const;
 
