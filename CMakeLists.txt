@@ -12,6 +12,8 @@ file(GLOB_RECURSE SOURCE_FILES
     "src/*.c"
 )
 
+MESSAGE(abc ${SOURCE_FILES})
+
 find_package(PkgConfig REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLM REQUIRED)
