@@ -9,6 +9,7 @@
 
 #include "defaults.h"
 #include "Raycaster.h"
+#include <cstdio>
 
 namespace param {
 
@@ -33,8 +34,8 @@ std::tuple<glm::vec3*, int*> Parametrizer::GetGLMesh(float* distances,
 }
 
 // TODO Change this for "circular" polyhedrons
-float* Parametrizer::Paramatrize(std::vector<Triangle*> triangles, float stepU,
-		float stepV, int& w, int& h) {
+float* Parametrizer::Paramatrize(std::vector<param::Triangle*> triangles,
+		float stepU, float stepV, int& w, int& h) {
 
 	w = (int(1 / stepV) + 1);
 	h = (int(1 / stepU) + 1);
@@ -46,8 +47,16 @@ float* Parametrizer::Paramatrize(std::vector<Triangle*> triangles, float stepU,
 	Ray ray(origin, direction);
 	Raycaster caster;
 
-	for (float u = 0; (1 - u) <= EPSILON; u += stepU) {
-		for (float v = 0; (1 - v) <= EPSILON; v += stepV) {
+	auto maxU = 1 + stepU;
+	auto maxV = 1 + stepV;
+
+	if (!wrap) {
+		maxU += stepU;
+		maxV += stepV;
+	}
+
+	for (float u = 0; (maxU - u) >= EPSILON; u += stepU) {
+		for (float v = 0; (maxV - v) >= EPSILON; v += stepV) {
 			this->GetStep(u, v, origin, direction);
 
 			ray.Set(origin, direction);

@@ -61,12 +61,9 @@ bool Ray::Intersect(const Triangle* triangle) const {
 float Ray::GetIntersectionDistance(const Triangle* triangle) const {
 
 	auto points = triangle->Get();
-
 	auto normal = triangle->GetNormal();
 
 	return glm::dot((*points[0] - orig), normal) / glm::dot(dir, normal);
-
-//	return ((d * dir) + orig);
 }
 
 void Ray::Set(const glm::vec3& origin, const glm::vec3& direction) {
@@ -74,8 +71,12 @@ void Ray::Set(const glm::vec3& origin, const glm::vec3& direction) {
 	dir = direction;
 }
 
-glm::vec3 Ray::GetDir() const {
+glm::vec3 Ray::GetDirection() const {
 	return dir;
+}
+
+glm::vec3 Ray::GetOrigin() const {
+	return orig;
 }
 
 } /* namespace param */

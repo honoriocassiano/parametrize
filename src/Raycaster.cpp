@@ -26,9 +26,11 @@ std::vector<CastEl> Raycaster::Cast(const Ray& ray,
 	for (const auto& t : triangles) {
 		if (ray.Intersect(t)) {
 			auto distance = ray.GetIntersectionDistance(t);
-			auto in = (glm::dot(t->GetNormal(), ray.GetDir()) >= 0);
+			auto in = (glm::dot(t->GetNormal(), ray.GetDirection()) >= 0);
 
 			casts.push_back( { distance, in });
+
+			auto temp = t->Get();
 		}
 	}
 

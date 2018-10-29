@@ -24,6 +24,8 @@ PlaneParametrizer::~PlaneParametrizer() {
 void PlaneParametrizer::GetStep(float a, float b, glm::vec3& origin,
 		glm::vec3& direction) const {
 
+	origin = a * u + b * v + p0;
+	direction = normal;
 }
 
 } /* namespace param */

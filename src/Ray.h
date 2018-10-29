@@ -24,7 +24,8 @@ public:
 	bool Intersect(const Triangle* triangle) const;
 	float GetIntersectionDistance(const Triangle* triangle) const;
 
-	glm::vec3 GetDir() const;
+	glm::vec3 GetDirection() const;
+	glm::vec3 GetOrigin() const;
 
 private:
 	glm::vec3 orig;

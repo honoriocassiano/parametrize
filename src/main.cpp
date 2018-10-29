@@ -1,8 +1,9 @@
-#include "Triangle.h"
-#include "Ray.h"
-#include "Raycaster.h"
+#include <glm/detail/type_vec.hpp>
+#include <glm/detail/type_vec3.hpp>
+#include <vector>
 
-#include <cstdio>
+#include "PlaneParametrizer.h"
+#include "Triangle.h"
 
 using namespace param;
 
@@ -20,16 +21,19 @@ int main(int argc, char const *argv[]) {
 	Triangle t4(&points[3], &points[2], &points[0]);
 
 //	Ray ray(glm::vec3(0, 0, -0.5), glm::vec3(0, 0, 1));
-	Ray ray(glm::vec3(0, 0, 0.5), glm::vec3(0, 0, -1));
+	int w, h;
 
-	Raycaster caster;
+	PlaneParametrizer p(glm::vec3(-1, -1, 2), glm::vec3(0, 2, 0),
+			glm::vec3(2, 0, 0));
 
-	auto values = caster.Cast(ray,
-			std::vector<Triangle*> { &t1, &t2, &t3, &t4 });
+//	auto d = p.Paramatrize(std::vector<Triangle*> { &t1, &t2, &t3, &t4 }, 0.5f,
+//			0.5f, w, h);
+	auto d = p.Paramatrize(std::vector<Triangle*> { &t1 }, 0.5f, 1.1f, w, h);
 
-	for (auto v : values) {
-		std::printf("%.3lf, %d\n", v.distance, v.in);
-	}
+
+//	for (int i = 0; i < w * h; ++i) {
+//		std::printf("%f\n", d[i]);
+//	}
 
 	return 0;
 }
