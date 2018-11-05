@@ -8,7 +8,8 @@ using namespace param;
 
 int main(int argc, char const *argv[]) {
 
-	float x = 1, y = 1, z = 1;
+	std::size_t size = 10;
+	float x = 1, y = 1;
 
 	glm::vec2 ps[4] = { glm::vec2(-x, -y), glm::vec2(-x, y), glm::vec2(x, y),
 			glm::vec2(x, -y) };
@@ -20,15 +21,13 @@ int main(int argc, char const *argv[]) {
 
 	CircleParametrizer p(glm::vec2(), 3);
 
-	std::size_t size;
+	auto f = p.Paramatrize(std::vector<Edge2*> { &e1, &e2, &e3, &e4 }, size);
 
-	auto f = p.Paramatrize(std::vector<Edge2*> { &e1, &e2, &e3, &e4 }, 0.1f,
-			size);
-
-	for (std::size_t i = 0; i < size; ++i) {
-		printf("%.3f ", f[i]);
-	}
-	printf("\n");
+	auto poly = p.GetPolygon(f, size);
+//	for (std::size_t i = 0; i < size; ++i) {
+//		printf("%.3f ", f[i]);
+//	}
+//	printf("\n");
 
 //	float x = 1, y = 1, z = 1;
 //	glm::vec3 points[4] = { glm::vec3(0, y, 0), glm::vec3(x, -y, 0), glm::vec3(

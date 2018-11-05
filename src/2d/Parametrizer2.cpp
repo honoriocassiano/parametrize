@@ -18,16 +18,26 @@ Parametrizer2::Parametrizer2(bool _wrap) :
 Parametrizer2::~Parametrizer2() {
 }
 
-std::tuple<glm::vec2*, int*> Parametrizer2::GetGLMesh(float* distances,
-		float step) const {
-	// TODO Implement this
-	return std::tuple<glm::vec2*, int*>();
+Polygon Parametrizer2::GetPolygon(float* distances, std::size_t size) const {
+
+	auto step = 1.0 / (size - 1);
+
+	glm::vec2 origin, direction;
+
+	glm::vec2 *points = new glm::vec2[size];
+
+	for (int i = 0; i < size; ++i) {
+		this->GetNext(i, step, origin, direction);
+
+		points[i] = origin + distances[i] * direction;
+	}
+
+	return Polygon(points, size);
 }
 
-float* Parametrizer2::Paramatrize(std::vector<Edge2*> edges, float step,
-		std::size_t& size) {
+float* Parametrizer2::Paramatrize(std::vector<Edge2*> edges, std::size_t size) {
 
-	size = (int(1 / step) + 1);
+	float step = 1.0 / (size - 1);
 
 	glm::vec2 origin, direction;
 

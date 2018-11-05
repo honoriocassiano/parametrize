@@ -9,6 +9,7 @@
 #define PARAMETRIZER2_H_
 
 #include "Edge2.h"
+#include "Polygon.h"
 
 #include <tuple>
 #include <vector>
@@ -24,9 +25,9 @@ public:
 	virtual void GetNext(int i, float step, glm::vec2& origin,
 			glm::vec2& direction) const = 0;
 
-	std::tuple<glm::vec2*, int*> GetGLMesh(float* distances, float step) const;
+	Polygon GetPolygon(float* distances, std::size_t size) const;
 
-	float* Paramatrize(std::vector<Edge2*> edges, float step, std::size_t& size);
+	float* Paramatrize(std::vector<Edge2*> edges, std::size_t size);
 
 private:
 	bool wrap;
