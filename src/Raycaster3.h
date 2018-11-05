@@ -10,21 +10,12 @@
 
 #include "Triangle.h"
 
+
 #include <vector>
 #include "Ray3.h"
+#include "utils.h"
 
 namespace param {
-
-struct CastEl {
-	float distance;
-	bool in;
-};
-
-struct {
-	bool operator()(const CastEl& c1, const CastEl& c2) {
-		return c1.distance <= c2.distance;
-	}
-} castElComp;
 
 class Raycaster3 {
 public:

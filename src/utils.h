@@ -13,6 +13,17 @@
 
 namespace param {
 
+struct CastEl {
+	float distance;
+	bool in;
+};
+
+struct {
+	bool operator()(const CastEl& c1, const CastEl& c2) {
+		return c1.distance <= c2.distance;
+	}
+} castElComp;
+
 constexpr bool IsClose(double value, double number = 0, double epsilon = EPSILON) {
 	return fabs(value - number) <= EPSILON;
 }
