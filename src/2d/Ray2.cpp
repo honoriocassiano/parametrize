@@ -41,7 +41,7 @@ bool Ray2::Intersect(const Edge2* edge, glm::vec2& intersecetionPoint) const {
 		auto t = cross((orig - *v[0]), dir) / cross(r, dir);
 		auto u = cross((*v[0] - orig), r) / cross(dir, r);
 
-		if ((t >= 0) && (t <= 1) && (u <= 0)) {
+		if ((t >= 0) && (t <= 1) && (u >= 0)) {
 			intersecetionPoint = *v[0] + t * r;
 		}
 

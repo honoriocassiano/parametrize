@@ -16,6 +16,11 @@ namespace param {
 struct CastEl {
 	float distance;
 	bool in;
+
+	CastEl(float distance, bool in) :
+			distance(distance), in(in) {
+
+	}
 };
 
 struct {
@@ -24,7 +29,8 @@ struct {
 	}
 } castElComp;
 
-constexpr bool IsClose(double value, double number = 0, double epsilon = EPSILON) {
+constexpr bool IsClose(double value, double number = 0,
+		double epsilon = EPSILON) {
 	return fabs(value - number) <= EPSILON;
 }
 }

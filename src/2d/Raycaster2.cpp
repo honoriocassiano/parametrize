@@ -24,15 +24,16 @@ std::vector<CastEl> Raycaster2::Cast(const Ray2& ray,
 	glm::vec2 intPoint;
 	std::vector<CastEl> casts;
 
-	for (const auto& t : edges) {
+	for (const auto& e : edges) {
 
-		if (ray.Intersect(t, intPoint)) {
+		if (ray.Intersect(e, intPoint)) {
+
 			auto distance = glm::distance(ray.GetOrigin(), intPoint);
-			auto in = (glm::dot(t->GetNormal(), ray.GetDirection()) >= 0);
+			auto in = (glm::dot(e->GetNormal(), ray.GetDirection()) >= 0);
 
-			casts.push_back( { distance, in });
+			casts.emplace_back(distance, in);
 
-			auto temp = t->Get();
+			auto temp = e->Get();
 		}
 	}
 
