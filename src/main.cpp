@@ -1,14 +1,31 @@
+#include <GLFW/glfw3.h>
+#include <GL/glu.h>
+
 #include <glm/detail/type_vec.hpp>
 #include <glm/detail/type_vec2.hpp>
+#include <GL/gl.h>
+#include <cstddef>
+#include <vector>
 
 #include "2d/CircleParametrizer.h"
 #include "2d/Edge2.h"
+#include "2d/Polygon.h"
 
 using namespace param;
 
+void init(int w, int h) {
+	glViewport(0, 0, w, h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(-5.0, 5.0, -5.0, 5.0);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+}
+
 int main(int argc, char const *argv[]) {
 
-	std::size_t size = 10;
+	int w = 800, h = 800;
+	std::size_t size = 8;
 	float x = 1, y = 1;
 
 	glm::vec2 ps[4] = { glm::vec2(-x, -y), glm::vec2(-x, y), glm::vec2(x, y),
@@ -24,6 +41,44 @@ int main(int argc, char const *argv[]) {
 	auto f = p.Paramatrize(std::vector<Edge2*> { &e1, &e2, &e3, &e4 }, size);
 
 	auto poly = p.GetPolygon(f, size);
+
+	GLFWwindow* window;
+
+	/* Initialize the library */
+	if (!glfwInit())
+		return -1;
+
+	/* Create a windowed mode window and its OpenGL context */
+	window = glfwCreateWindow(w, h, "Parametrizer", NULL, NULL);
+	if (!window) {
+		glfwTerminate();
+		return -1;
+	}
+
+	/* Make the window's context current */
+	glfwMakeContextCurrent(window);
+
+//	glfwSetCursorPosCallback(window, pick/Squares);
+
+//	glfwSetKeyCallback(window, key_callback);
+	init(w, h);
+
+	/* Loop until the user closes the window */
+	while (!glfwWindowShouldClose(window)) {
+		/* Render here */
+		glClear(GL_COLOR_BUFFER_BIT);
+
+//		poly.Draw();
+		poly.Draw(true);
+
+		/* Swap front and back buffers */
+		glfwSwapBuffers(window);
+
+		/* Poll for and process events */
+		glfwPollEvents();
+	}
+
+	glfwTerminate();
 //	for (std::size_t i = 0; i < size; ++i) {
 //		printf("%.3f ", f[i]);
 //	}

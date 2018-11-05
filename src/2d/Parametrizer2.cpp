@@ -20,7 +20,11 @@ Parametrizer2::~Parametrizer2() {
 
 Polygon Parametrizer2::GetPolygon(float* distances, std::size_t size) const {
 
-	auto step = 1.0 / (size - 1);
+	float step = 1.0 / size;
+
+	if(!wrap) {
+		step = 1.0 / (size - 1);
+	}
 
 	glm::vec2 origin, direction;
 
@@ -37,22 +41,22 @@ Polygon Parametrizer2::GetPolygon(float* distances, std::size_t size) const {
 
 float* Parametrizer2::Paramatrize(std::vector<Edge2*> edges, std::size_t size) {
 
-	float step = 1.0 / (size - 1);
+	float step = 1.0 / size;
+
+	if(!wrap) {
+		step = 1.0 / (size - 1);
+	}
 
 	glm::vec2 origin, direction;
 
 	Ray2 ray(origin, direction);
 	Raycaster2 caster;
 
-	auto maxStep = 1 + step;
-
 	float* matrix = new float[size];
 
 	for (int i = 0; i < size; ++i) {
 
 		this->GetNext(i, step, origin, direction);
-
-//		printf("(%.2f, %.2f)\n", direction.x, direction.y);
 
 		ray.Set(origin, direction);
 

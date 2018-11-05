@@ -16,7 +16,7 @@ class Polygon {
 public:
 	Polygon(glm::vec2* positions, std::size_t size);
 
-	void Draw() const;
+	void Draw(bool points = false) const;
 
 	virtual ~Polygon();
 

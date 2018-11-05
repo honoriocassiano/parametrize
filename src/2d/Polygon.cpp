@@ -9,18 +9,27 @@
 
 #include <GL/gl.h>
 
+#include <stdio.h>
+
 namespace param {
 
 Polygon::Polygon(glm::vec2* _positions, std::size_t _size) :
 		positions(_positions), size(_size) {
 }
 
-void Polygon::Draw() const {
+void Polygon::Draw(bool points) const {
 
-	glBegin(GL_LINE_LOOP);
+	if(points) {
+		glBegin(GL_POINTS);
+	} else {
+		glBegin(GL_LINE_LOOP);
+	}
+
 
 	for (int i = 0; i < size; ++i) {
 		glVertex2f(positions[i].x, positions[i].y);
+
+//		printf("(%.2f), %.2f)\n", positions[i].x, positions[i].y);
 	}
 
 	glEnd();
