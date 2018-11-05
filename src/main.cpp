@@ -2,7 +2,7 @@
 #include <glm/detail/type_vec3.hpp>
 #include <vector>
 
-#include "PlaneParametrizer.h"
+#include "PlaneParametrizer3.h"
 #include "Triangle.h"
 
 using namespace param;

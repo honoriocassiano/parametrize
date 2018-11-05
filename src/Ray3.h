@@ -14,10 +14,10 @@
 
 namespace param {
 
-class Ray {
+class Ray3 {
 public:
-	Ray(const glm::vec3& origin, const glm::vec3& direction);
-	virtual ~Ray();
+	Ray3(const glm::vec3& origin, const glm::vec3& direction);
+	virtual ~Ray3();
 
 	void Set(const glm::vec3& origin, const glm::vec3& direction);
 

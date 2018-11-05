@@ -5,13 +5,13 @@
  *      Author: cassiano
  */
 
-#ifndef RAYCASTER_H_
-#define RAYCASTER_H_
+#ifndef RAYCASTER3_H_
+#define RAYCASTER3_H_
 
-#include "Ray.h"
 #include "Triangle.h"
 
 #include <vector>
+#include "Ray3.h"
 
 namespace param {
 
@@ -26,15 +26,15 @@ struct {
 	}
 } castElComp;
 
-class Raycaster {
+class Raycaster3 {
 public:
-	Raycaster();
-	virtual ~Raycaster();
+	Raycaster3();
+	virtual ~Raycaster3();
 
-	std::vector<CastEl> Cast(const Ray& ray,
+	std::vector<CastEl> Cast(const Ray3& ray,
 			const std::vector<Triangle*>& triangles);
 };
 
 } /* namespace param */
 
-#endif /* RAYCASTER_H_ */
+#endif /* RAYCASTER3_H_ */

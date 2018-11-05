@@ -5,8 +5,8 @@
  *      Author: cassiano
  */
 
-#ifndef PARAMETRIZER_H_
-#define PARAMETRIZER_H_
+#ifndef PARAMETRIZER3_H_
+#define PARAMETRIZER3_H_
 
 #include "Triangle.h"
 
@@ -15,10 +15,10 @@
 
 namespace param {
 
-class Parametrizer {
+class Parametrizer3 {
 public:
-	Parametrizer(bool wrap = true);
-	virtual ~Parametrizer();
+	Parametrizer3(bool wrap = true);
+	virtual ~Parametrizer3();
 
 	virtual void GetStep(float u, float v, glm::vec3& origin,
 			glm::vec3& direction) const = 0;
@@ -34,4 +34,4 @@ private:
 
 } /* namespace param */
 
-#endif /* PARAMETRIZER_H_ */
+#endif /* PARAMETRIZER3_H_ */

@@ -5,7 +5,7 @@
  *      Author: cassiano
  */
 
-#include "Ray.h"
+#include "Ray3.h"
 
 #include "defaults.h"
 
@@ -13,14 +13,14 @@
 
 namespace param {
 
-Ray::Ray(const glm::vec3& _origin, const glm::vec3& _direction) :
+Ray3::Ray3(const glm::vec3& _origin, const glm::vec3& _direction) :
 		orig(_origin), dir(glm::normalize(_direction)) {
 }
 
-Ray::~Ray() {
+Ray3::~Ray3() {
 }
 
-bool Ray::Intersect(const Triangle* triangle) const {
+bool Ray3::Intersect(const Triangle* triangle) const {
 
 	float u, v;
 	auto tpoints = triangle->Get();
@@ -58,7 +58,7 @@ bool Ray::Intersect(const Triangle* triangle) const {
 	return true;
 }
 
-float Ray::GetIntersectionDistance(const Triangle* triangle) const {
+float Ray3::GetIntersectionDistance(const Triangle* triangle) const {
 
 	auto points = triangle->Get();
 	auto normal = triangle->GetNormal();
@@ -66,16 +66,16 @@ float Ray::GetIntersectionDistance(const Triangle* triangle) const {
 	return glm::dot((*points[0] - orig), normal) / glm::dot(dir, normal);
 }
 
-void Ray::Set(const glm::vec3& origin, const glm::vec3& direction) {
+void Ray3::Set(const glm::vec3& origin, const glm::vec3& direction) {
 	orig = origin;
 	dir = direction;
 }
 
-glm::vec3 Ray::GetDirection() const {
+glm::vec3 Ray3::GetDirection() const {
 	return dir;
 }
 
-glm::vec3 Ray::GetOrigin() const {
+glm::vec3 Ray3::GetOrigin() const {
 	return orig;
 }
 

@@ -5,20 +5,20 @@
  *      Author: cassiano
  */
 
-#include "Raycaster.h"
+#include "Raycaster3.h"
 
 #include <algorithm>
 #include <glm/geometric.hpp>
 
 namespace param {
 
-Raycaster::Raycaster() {
+Raycaster3::Raycaster3() {
 }
 
-Raycaster::~Raycaster() {
+Raycaster3::~Raycaster3() {
 }
 
-std::vector<CastEl> Raycaster::Cast(const Ray& ray,
+std::vector<CastEl> Raycaster3::Cast(const Ray3& ray,
 		const std::vector<Triangle*>& triangles) {
 
 	std::vector<CastEl> casts;

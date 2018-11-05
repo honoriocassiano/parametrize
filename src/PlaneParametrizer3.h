@@ -5,16 +5,15 @@
  *      Author: cassiano
  */
 
-#ifndef PLANEPARAMETRIZER_H_
-#define PLANEPARAMETRIZER_H_
-
-#include "Parametrizer.h"
+#ifndef PLANEPARAMETRIZER3_H_
+#define PLANEPARAMETRIZER3_H_
 
 #include <glm/vec3.hpp>
+#include "Parametrizer3.h"
 
 namespace param {
 
-class PlaneParametrizer: public Parametrizer {
+class PlaneParametrizer: public Parametrizer3 {
 public:
 	PlaneParametrizer(const glm::vec3& p0, const glm::vec3& u,
 			const glm::vec3& v);
@@ -33,4 +32,4 @@ private:
 
 } /* namespace param */
 
-#endif /* PLANEPARAMETRIZER_H_ */
+#endif /* PLANEPARAMETRIZER3_H_ */

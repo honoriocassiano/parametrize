@@ -5,11 +5,11 @@
  *      Author: cassiano
  */
 
-#include "Parametrizer.h"
+#include "Parametrizer3.h"
 
 #include "defaults.h"
-#include "Raycaster.h"
 #include <cstdio>
+#include "Raycaster3.h"
 
 namespace param {
 
@@ -20,21 +20,23 @@ int toMatrix(float u, float v, float stepU, float stepV) {
 	return (int(1 / stepV) + 1) * posU + posV;
 }
 
-Parametrizer::Parametrizer(bool _wrap) :
+Parametrizer3::Parametrizer3(bool _wrap) :
 		wrap(_wrap) {
 }
 
-Parametrizer::~Parametrizer() {
+Parametrizer3::~Parametrizer3() {
 }
 
-std::tuple<glm::vec3*, int*> Parametrizer::GetGLMesh(float* distances,
+std::tuple<glm::vec3*, int*> Parametrizer3::GetGLMesh(float* distances,
 		float stepU, float stepV) const {
 
-	// TODO Implement this function
+	if(!wrap) {
+
+	}
 }
 
 // TODO Change this for "circular" polyhedrons
-float* Parametrizer::Paramatrize(std::vector<param::Triangle*> triangles,
+float* Parametrizer3::Paramatrize(std::vector<param::Triangle*> triangles,
 		float stepU, float stepV, int& w, int& h) {
 
 	w = (int(1 / stepV) + 1);
@@ -44,8 +46,8 @@ float* Parametrizer::Paramatrize(std::vector<param::Triangle*> triangles,
 
 	glm::vec3 origin, direction;
 
-	Ray ray(origin, direction);
-	Raycaster caster;
+	Ray3 ray(origin, direction);
+	Raycaster3 caster;
 
 	auto maxU = 1 + stepU;
 	auto maxV = 1 + stepV;

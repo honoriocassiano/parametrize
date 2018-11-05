@@ -5,9 +5,8 @@
  *      Author: cassiano
  */
 
-#include "PlaneParametrizer.h"
-
 #include <glm/geometric.hpp>
+#include "PlaneParametrizer3.h"
 
 namespace param {
 
