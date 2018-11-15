@@ -28,8 +28,6 @@ void Polygon::Draw(bool points) const {
 
 	for (int i = 0; i < size; ++i) {
 		glVertex2f(positions[i].x, positions[i].y);
-
-//		printf("(%.2f), %.2f)\n", positions[i].x, positions[i].y);
 	}
 
 	glEnd();

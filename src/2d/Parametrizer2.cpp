@@ -11,73 +11,65 @@
 
 namespace param {
 
-Parametrizer2::Parametrizer2(bool _wrap) :
-		wrap(_wrap) {
+Parametrizer2::Parametrizer2(const SimpleMesh& _mesh, std::size_t _splits) :
+		mesh(_mesh), splits(_splits), child(nullptr), distances(nullptr) {
 }
 
 Parametrizer2::~Parametrizer2() {
+	delete[] child;
+	delete[] distances;
 }
 
-Polygon Parametrizer2::GetPolygon(float* distances, std::size_t size) const {
+Polygon Parametrizer2::GetPolygon() const {
 
-	float step = 1.0 / size;
-
-	if(!wrap) {
-		step = 1.0 / (size - 1);
-	}
+	float step = 1.0 / splits;
 
 	glm::vec2 origin, direction;
 
-	glm::vec2 *points = new glm::vec2[size];
+	glm::vec2 *points = new glm::vec2[splits];
 
-	for (int i = 0; i < size; ++i) {
+	for (int i = 0; i < splits; ++i) {
 		this->GetNext(i, step, origin, direction);
 
 		points[i] = origin + distances[i] * direction;
 	}
 
-	return Polygon(points, size);
+	return Polygon(points, splits);
 }
 
-float* Parametrizer2::Paramatrize(std::vector<Edge2*> edges, std::size_t size) {
+float Parametrizer2::Paramatrize() {
 
-	float step = 1.0 / size;
-
-	if(!wrap) {
-		step = 1.0 / (size - 1);
-	}
+	float step = 1.0 / splits;
 
 	glm::vec2 origin, direction;
 
 	Ray2 ray(origin, direction);
 	Raycaster2 caster;
 
-	float* matrix = new float[size];
+	distances = new float[splits];
 
-	for (int i = 0; i < size; ++i) {
+	for (int i = 0; i < splits; ++i) {
 
 		this->GetNext(i, step, origin, direction);
 
 		ray.Set(origin, direction);
 
 		// TODO Add max distance to cast
-		auto casts = caster.Cast(ray, edges);
-
-//		printf("%lu\n", casts.size());
+		auto casts = caster.Cast(ray, mesh);
 
 		if (casts.size() > 2) {
 			// TODO Mark to recast
 		}
 
 		if (casts.size() > 0) {
-			//			matrix[int(u / stepU)][int(v / stepV)] = casts[0].distance;
-			matrix[i] = casts[0].distance;
+			distances[i] = casts[0].distance;
 		} else {
-			matrix[i] = NAN;
+			distances[i] = NAN;
 		}
 	}
 
-	return matrix;
+// TODO Return error
+	return 0;
 }
 
 } /* namespace param */

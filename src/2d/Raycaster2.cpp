@@ -18,22 +18,26 @@ Raycaster2::Raycaster2() {
 Raycaster2::~Raycaster2() {
 }
 
-std::vector<CastEl> Raycaster2::Cast(const Ray2& ray,
-		const std::vector<Edge2*>& edges) {
+std::vector<CastEl> Raycaster2::Cast(const Ray2& ray, const SimpleMesh& mesh) {
 
 	glm::vec2 intPoint;
 	std::vector<CastEl> casts;
 
-	for (const auto& e : edges) {
+	for (int i = 0; i < mesh.size; ++i) {
 
-		if (ray.Intersect(e, intPoint)) {
+		auto v1 = mesh.vertices[mesh.indices[i]];
+		auto v2 = mesh.vertices[mesh.indices[(i + 1) % mesh.size]];
+
+		if (ray.Intersect(v1, v2, intPoint)) {
+
+			auto normal = (v2 - v1);
+			normal = glm::vec2(normal.y, -normal.x);
 
 			auto distance = glm::distance(ray.GetOrigin(), intPoint);
-			auto in = (glm::dot(e->GetNormal(), ray.GetDirection()) >= 0);
+			auto in = (glm::dot(normal, ray.GetDirection()) >= 0);
 
 			casts.emplace_back(distance, in);
 
-			auto temp = e->Get();
 		}
 	}
 

@@ -25,22 +25,24 @@ void init(int w, int h) {
 int main(int argc, char const *argv[]) {
 
 	int w = 800, h = 800;
-	std::size_t size = 8;
+	std::size_t size = 20;
 	float x = 1, y = 1;
 
 	glm::vec2 ps[4] = { glm::vec2(-x, -y), glm::vec2(-x, y), glm::vec2(x, y),
 			glm::vec2(x, -y) };
 
-	Edge2 e1(&ps[0], &ps[1]);
-	Edge2 e2(&ps[1], &ps[2]);
-	Edge2 e3(&ps[2], &ps[3]);
-	Edge2 e4(&ps[3], &ps[0]);
+	int idx[4] = { 0, 1, 2, 3 };
+//	Edge2 e1(&ps[0], &ps[1]);
+//	Edge2 e2(&ps[1], &ps[2]);
+//	Edge2 e3(&ps[2], &ps[3]);
+//	Edge2 e4(&ps[3], &ps[0]);
 
-	CircleParametrizer p(glm::vec2(), 3);
+	CircleParametrizer p({ps, idx, 4}, size, glm::vec2(), 3);
 
-	auto f = p.Paramatrize(std::vector<Edge2*> { &e1, &e2, &e3, &e4 }, size);
+//	auto f = p.Paramatrize(std::vector<Edge2*> { &e1, &e2, &e3, &e4 }, size);
+	auto f = p.Paramatrize();
 
-	auto poly = p.GetPolygon(f, size);
+	auto poly = p.GetPolygon();
 
 	GLFWwindow* window;
 

@@ -9,9 +9,17 @@
 #define UTILS_H_
 
 #include "defaults.h"
+
 #include <math.h>
+#include <glm/vec2.hpp>
 
 namespace param {
+
+struct SimpleMesh {
+	glm::vec2* vertices;
+	int* indices;
+	std::size_t size;
+};
 
 struct CastEl {
 	float distance;

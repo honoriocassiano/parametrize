@@ -12,8 +12,10 @@
 
 namespace param {
 
-CircleParametrizer::CircleParametrizer(glm::vec2 center, float radius) :
-		Parametrizer2(true), c(center), r(radius) {
+CircleParametrizer::CircleParametrizer(const SimpleMesh& mesh, float step,
+		glm::vec2 center, float radius) :
+		Parametrizer2(mesh, step), c(center), r(
+				radius) {
 }
 
 CircleParametrizer::~CircleParametrizer() {

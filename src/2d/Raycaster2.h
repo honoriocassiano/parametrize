@@ -16,15 +16,13 @@
 
 namespace param {
 
-	class Raycaster2 {
-	public:
-		Raycaster2();
-		virtual ~Raycaster2();
+class Raycaster2 {
+public:
+	Raycaster2();
+	virtual ~Raycaster2();
 
-
-	std::vector<CastEl> Cast(const Ray2& ray,
-				const std::vector<Edge2*>& edges);
-	};
+	std::vector<CastEl> Cast(const Ray2& ray, const SimpleMesh& mesh);
+};
 } /* namespace param */
 
 #endif /* RAYCASTER2_H_ */

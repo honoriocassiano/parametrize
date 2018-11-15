@@ -10,13 +10,16 @@
 
 #include "Parametrizer2.h"
 
+#include "../utils.h"
+
 namespace param {
 
 class CircleParametrizer: public Parametrizer2 {
 public:
-	CircleParametrizer(glm::vec2 center, float radius);
+	CircleParametrizer(const SimpleMesh& mesh, float step, glm::vec2 center, float radius);
 	virtual ~CircleParametrizer();
 
+protected:
 	void GetNext(int i, float step, glm::vec2& origin,
 			glm::vec2& direction) const override;
 

@@ -28,21 +28,21 @@ void Ray2::Set(const glm::vec2& origin, const glm::vec2& direction) {
 	dir = direction;
 }
 
-bool Ray2::Intersect(const Edge2* edge, glm::vec2& intersecetionPoint) const {
-	auto v = edge->Get();
+bool Ray2::Intersect(const glm::vec2& v1, const glm::vec2& v2,
+		glm::vec2& intersectionPoint) const {
 
-	auto r = *v[1] - *v[0];
+	auto r = v2 - v1;
 
-	intersecetionPoint = glm::vec2();
+	intersectionPoint = glm::vec2();
 
-	if (IsClose(cross(r, dir)) && !IsClose(cross((*v[0] - orig), r))) {
+	if (IsClose(cross(r, dir)) && !IsClose(cross((v1 - orig), r))) {
 		return false;
 	} else {
-		auto t = cross((orig - *v[0]), dir) / cross(r, dir);
-		auto u = cross((*v[0] - orig), r) / cross(dir, r);
+		auto t = cross((orig - v1), dir) / cross(r, dir);
+		auto u = cross((v1 - orig), r) / cross(dir, r);
 
 		if ((t >= 0) && (t <= 1) && (u >= 0)) {
-			intersecetionPoint = *v[0] + t * r;
+			intersectionPoint = v1 + t * r;
 		}
 
 		return true;

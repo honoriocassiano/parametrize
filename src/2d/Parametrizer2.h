@@ -10,6 +10,7 @@
 
 #include "Edge2.h"
 #include "Polygon.h"
+#include "../utils.h"
 
 #include <tuple>
 #include <vector>
@@ -19,18 +20,25 @@ namespace param {
 
 class Parametrizer2 {
 public:
-	Parametrizer2(bool wrap = true);
+	Parametrizer2(const SimpleMesh& mesh, std::size_t splits);
 	virtual ~Parametrizer2();
+
+	Polygon GetPolygon() const;
+
+	float Paramatrize();
+
+protected:
 
 	virtual void GetNext(int i, float step, glm::vec2& origin,
 			glm::vec2& direction) const = 0;
 
-	Polygon GetPolygon(float* distances, std::size_t size) const;
+protected:
 
-	float* Paramatrize(std::vector<Edge2*> edges, std::size_t size);
+	float * distances;
+	Parametrizer2* child;
 
-private:
-	bool wrap;
+	SimpleMesh mesh;
+	std::size_t splits;
 };
 
 } /* namespace param */
