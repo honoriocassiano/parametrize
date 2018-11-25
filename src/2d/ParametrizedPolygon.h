@@ -21,7 +21,8 @@ class ParametrizedPolygon {
 public:
 //	ParametrizedPolygon(float* distances, glm::vec2* vertices,
 //			std::size_t size);
-	ParametrizedPolygon(glm::vec2* vertices, std::size_t size);
+	ParametrizedPolygon(SimpleMesh* mesh, glm::vec2* vertices,
+			std::size_t size);
 
 	virtual ~ParametrizedPolygon();
 
@@ -30,13 +31,17 @@ public:
 	virtual float Parametrize();
 
 protected:
+
+	ParametrizedPolygon();
+
 //	ParametrizedPolygon(float* distances, glm::vec2* vertices,
 //				std::size_t size, unsigned char level, std::vector<VertexHolder>* layers);
-	ParametrizedPolygon(glm::vec2* vertices, std::size_t size,
-			unsigned char level, std::vector<VertexHolder>* layers);
+	ParametrizedPolygon(SimpleMesh* mesh, glm::vec2* vertices, std::size_t size,
+			unsigned char level, std::vector<VertexHolder>* layers,
+			glm::vec2* normals = nullptr);
 
-private:
-
+protected:
+	SimpleMesh* mesh;
 	ParametrizedPolygon* child;
 
 //	std::size_t size;

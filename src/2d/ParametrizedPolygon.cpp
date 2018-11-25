@@ -52,22 +52,27 @@ void ToNormal(glm::vec2& v) {
 	v.y = tmp;
 }
 
+ParametrizedPolygon::ParametrizedPolygon() :
+		mesh(nullptr), child(nullptr), level(0), layers(nullptr) {
+}
+
 //ParametrizedPolygon::ParametrizedPolygon(float* _distances,
 //		glm::vec2* _vertices, std::size_t _size) :
 //		ParametrizedPolygon(_distances, _vertices, _size, nullptr) {
 //}
-ParametrizedPolygon::ParametrizedPolygon(glm::vec2* _vertices,
+ParametrizedPolygon::ParametrizedPolygon(SimpleMesh* mesh, glm::vec2* _vertices,
 		std::size_t _size) :
-		ParametrizedPolygon(_vertices, _size, 0, nullptr) {
+		ParametrizedPolygon(mesh, _vertices, _size, 0, nullptr) {
 }
 
 //ParametrizedPolygon::ParametrizedPolygon(float* _distances,
 //		glm::vec2* _vertices, std::size_t _size, unsigned char _level,
 //		std::vector<VertexHolder>* _layers) :
 //		child(nullptr), level(_level), layers(_layers) {
-ParametrizedPolygon::ParametrizedPolygon(glm::vec2* vertices, std::size_t size,
-		unsigned char _level, std::vector<VertexHolder>* _layers) :
-		child(nullptr), level(_level), layers(_layers) {
+ParametrizedPolygon::ParametrizedPolygon(SimpleMesh* _mesh, glm::vec2* vertices,
+		std::size_t size, unsigned char _level,
+		std::vector<VertexHolder>* _layers, glm::vec2* normals) :
+		mesh(_mesh), child(nullptr), level(_level), layers(_layers) {
 
 	if (!layers) {
 		layers = new std::vector<VertexHolder>;
@@ -79,31 +84,33 @@ ParametrizedPolygon::ParametrizedPolygon(glm::vec2* vertices, std::size_t size,
 		count += layers->back().count;
 	}
 
-	auto normals = new glm::vec2[size];
+	if (!normals) {
+		normals = new glm::vec2[size];
 
-	glm::vec2 lastNormal;
+		glm::vec2 lastNormal;
 
-	for (std::size_t i = 0; i < size; ++i) {
+		for (std::size_t i = 0; i < size; ++i) {
 
-		auto current = (i + 1) % size;
+			auto current = (i + 1) % size;
 
-		auto v1 = vertices[current];
-		auto v2 = vertices[(i + 2) % size];
+			auto v1 = vertices[current];
+			auto v2 = vertices[(i + 2) % size];
 
-		auto temp1 = glm::normalize(v2 - v1);
+			auto temp1 = glm::normalize(v2 - v1);
 
-		if (i == 0) {
-			auto vFirst = vertices[i];
-			lastNormal = glm::normalize(v1 - vFirst);
+			if (i == 0) {
+				auto vFirst = vertices[i];
+				lastNormal = glm::normalize(v1 - vFirst);
 
-			ToNormal(lastNormal);
+				ToNormal(lastNormal);
+			}
+
+			ToNormal(temp1);
+
+			normals[i] = (temp1 + lastNormal) * 0.5f;
+
+			lastNormal = temp1;
 		}
-
-		ToNormal(temp1);
-
-		normals[i] = (temp1 + lastNormal) * 0.5f;
-
-		lastNormal = temp1;
 	}
 
 	layers->emplace_back(vertices, normals, nullptr, size, count);
@@ -125,9 +132,38 @@ ParametrizedPolygon::~ParametrizedPolygon() {
 	}
 
 	layers->pop_back();
+
+	if (!level) {
+		delete layers;
+	}
 }
 
 Polygon ParametrizedPolygon::GetPolygon() {
+	if (child) {
+		return child->GetPolygon();
+	}
+
+	auto currentPos = GetByPosition(layers, 0);
+
+	auto vertices = new glm::vec2[layers->back().count];
+
+	for (auto i = 0; i < layers->back().count; ++i) {
+		auto nextPos = GetByPosition(layers, (i + 1) % layers->back().count);
+
+		const auto& current = layers->at(currentPos.layer);
+		const auto& next = layers->at(nextPos.layer);
+
+		auto v1 = current.vertices[currentPos.pos]
+				+ current.normals[currentPos.pos]
+						* current.distances[currentPos.pos];
+
+		auto v2 = next.vertices[nextPos.pos]
+				+ next.normals[nextPos.pos] * next.distances[nextPos.pos];
+
+		vertices[i] = (v1 + v2) * 0.5f;
+	}
+
+	return Polygon(vertices, layers->back().count);
 }
 
 float ParametrizedPolygon::Parametrize() {
@@ -182,9 +218,11 @@ float ParametrizedPolygon::Parametrize() {
 		currentPos = nextPos;
 	}
 
-	child = new ParametrizedPolygon(newVertices, ref.count, level + 1, layers);
+	child = new ParametrizedPolygon(mesh, newVertices, ref.count, level + 1,
+			layers);
 
 	return 0;
 }
 
 } /* namespace param */
+
