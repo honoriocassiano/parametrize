@@ -32,12 +32,16 @@ VertexIndex GetByPosition(std::vector<VertexHolder>* layers, std::size_t i) {
 		return VertexIndex { 0, 0 };
 	}
 
+	if (layers->size() == 3 && i == 2) {
+		int a = 1;
+	}
+
 	for (auto l = 0; l < levels; ++l) {
 		auto temp = 1 << l;
 
 		if (l < (levels - 1)) {
 			if ((i - temp) % (1 << (l + 1)) == 0) {
-				level = levels - level - 1;
+				level = levels - l - 1;
 				pos = (i - temp) / (1 << (l + 1));
 
 				break;

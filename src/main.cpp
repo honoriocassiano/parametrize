@@ -50,7 +50,7 @@ int main(int argc, char const *argv[]) {
 //	auto poly1 = p.GetPolygon();
 
 	f = p.Parametrize();
-//	p.Parametrize();
+	p.Parametrize();
 
 	auto poly2 = p.GetPolygon();
 
