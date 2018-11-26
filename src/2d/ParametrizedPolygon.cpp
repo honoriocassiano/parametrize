@@ -20,6 +20,11 @@ struct VertexIndex {
 };
 
 VertexIndex GetByPosition(std::vector<VertexHolder>* layers, std::size_t i) {
+
+	if (layers->size() == 1) {
+		return VertexIndex { 0, i };
+	}
+
 	std::size_t level = -1, pos = -1;
 	std::size_t levels = layers->size();
 
