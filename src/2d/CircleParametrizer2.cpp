@@ -25,7 +25,7 @@ CircleParametrizer2::CircleParametrizer2(SimpleMesh* _mesh, std::size_t size,
 
 	glm::vec2 lastNormal;
 
-	for (long int i = 0; i < size; ++i) {
+	for (long i = 0; i < size; ++i) {
 
 		float u = (-i * step) * 2 * M_PI;
 

@@ -19,8 +19,6 @@ namespace param {
 
 class ParametrizedPolygon {
 public:
-//	ParametrizedPolygon(float* distances, glm::vec2* vertices,
-//			std::size_t size);
 	ParametrizedPolygon(SimpleMesh* mesh, glm::vec2* vertices,
 			std::size_t size);
 
@@ -34,11 +32,12 @@ protected:
 
 	ParametrizedPolygon();
 
-//	ParametrizedPolygon(float* distances, glm::vec2* vertices,
-//				std::size_t size, unsigned char level, std::vector<VertexHolder>* layers);
 	ParametrizedPolygon(SimpleMesh* mesh, glm::vec2* vertices, std::size_t size,
 			unsigned char level, std::vector<VertexHolder>* layers,
 			glm::vec2* normals = nullptr);
+
+private:
+	void ComputeNormals();
 
 protected:
 	SimpleMesh* mesh;

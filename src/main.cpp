@@ -10,6 +10,7 @@
 #include "2d/CircleParametrizer.h"
 #include "2d/Edge2.h"
 #include "2d/Polygon.h"
+#include "2d/CircleParametrizer2.h"
 
 using namespace param;
 
@@ -32,17 +33,26 @@ int main(int argc, char const *argv[]) {
 			glm::vec2(x, -y) };
 
 	int idx[4] = { 0, 1, 2, 3 };
+
+	SimpleMesh sm { ps, idx, 4 };
+
 //	Edge2 e1(&ps[0], &ps[1]);
 //	Edge2 e2(&ps[1], &ps[2]);
 //	Edge2 e3(&ps[2], &ps[3]);
 //	Edge2 e4(&ps[3], &ps[0]);
 
-	CircleParametrizer p({ps, idx, 4}, size, glm::vec2(), 3);
+//	CircleParametrizer p({ps, idx, 4}, size, glm::vec2(), 3);
+	CircleParametrizer2 p(&sm, 4, glm::vec2(), 3);
 
 //	auto f = p.Paramatrize(std::vector<Edge2*> { &e1, &e2, &e3, &e4 }, size);
-	auto f = p.Paramatrize();
+	auto f = p.Parametrize();
 
-	auto poly = p.GetPolygon();
+//	auto poly1 = p.GetPolygon();
+
+	f = p.Parametrize();
+//	p.Parametrize();
+
+	auto poly2 = p.GetPolygon();
 
 	GLFWwindow* window;
 
@@ -70,8 +80,12 @@ int main(int argc, char const *argv[]) {
 		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT);
 
-//		poly.Draw();
-		poly.Draw(true);
+//		glColor3f(1, 1, 1);
+//		poly1.Draw();
+
+//		glColor3f(1, 0, 0);
+		poly2.Draw(1);
+//		poly.Draw(true);
 
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
