@@ -19,14 +19,14 @@ Polygon::Polygon(glm::vec2* _positions, std::size_t _size) :
 
 void Polygon::Draw(bool points) const {
 
-	if(points) {
+	if (points) {
+		glPointSize(3.0);
 		glBegin(GL_POINTS);
 	} else {
 		glBegin(GL_LINE_LOOP);
 	}
 
-
-	for (int i = 0; i < size; ++i) {
+	for (std::size_t i = 0; i < size; ++i) {
 		glVertex2f(positions[i].x, positions[i].y);
 	}
 
