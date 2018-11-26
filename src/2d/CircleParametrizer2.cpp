@@ -30,7 +30,7 @@ CircleParametrizer2::CircleParametrizer2(SimpleMesh* _mesh, std::size_t size,
 		float u = (-i * step) * 2 * M_PI;
 
 		vertices[i] = glm::vec2(radius * cos(u), radius * sin(u));
-		normals[i] = -glm::normalize(center - vertices[i]);
+		normals[i] = glm::normalize(center - vertices[i]);
 	}
 
 	mesh = _mesh;
