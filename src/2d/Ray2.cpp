@@ -41,7 +41,6 @@ bool Ray2::Intersect(const glm::vec2& v1, const glm::vec2& v2,
 		auto t = cross((orig - v1), dir) / cross(r, dir);
 		auto u = cross((v1 - orig), r) / cross(dir, r);
 
-//		if ((t >= 0) && (t <= 1) && (u >= 0)) {
 		if ((t >= 0) && (t <= 1)) {
 			intersectionPoint = v1 + t * r;
 		}

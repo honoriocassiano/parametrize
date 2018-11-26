@@ -15,12 +15,6 @@ namespace param {
 
 Polygon::Polygon(glm::vec2* _positions, std::size_t _size) :
 		positions(_positions), size(_size) {
-
-	printf("%lu\n", size);
-
-//	for (std::size_t i = 0; i < size; ++i) {
-//		printf("%f %f\n", positions[i].x, positions[i].y);
-//	}
 }
 
 void Polygon::Draw(bool points) const {

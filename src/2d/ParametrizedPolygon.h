@@ -33,8 +33,7 @@ protected:
 	ParametrizedPolygon();
 
 	ParametrizedPolygon(SimpleMesh* mesh, glm::vec2* vertices, std::size_t size,
-			unsigned char level, std::vector<VertexHolder>* layers,
-			glm::vec2* normals = nullptr);
+			unsigned char level, std::vector<VertexHolder>* layers);
 
 private:
 	void ComputeNormals();
