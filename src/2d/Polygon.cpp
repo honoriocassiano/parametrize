@@ -20,7 +20,7 @@ Polygon::Polygon(glm::vec2* _positions, std::size_t _size) :
 void Polygon::Draw(bool points) const {
 
 	if (points) {
-		glPointSize(3.0);
+		glPointSize(5.0);
 		glBegin(GL_POINTS);
 	} else {
 		glBegin(GL_LINE_LOOP);

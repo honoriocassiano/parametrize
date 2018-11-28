@@ -43,9 +43,9 @@ bool Ray2::Intersect(const glm::vec2& v1, const glm::vec2& v2,
 
 		if ((t >= 0) && (t <= 1)) {
 			intersectionPoint = v1 + t * r;
-		}
 
-		return true;
+			return true;
+		}
 	}
 
 	return false;
