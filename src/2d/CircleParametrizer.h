@@ -1,33 +1,59 @@
 /*
  * CircleParametrizer.h
  *
- *  Created on: 5 de nov de 2018
+ *  Created on: 25 de nov de 2018
  *      Author: cassiano
  */
 
 #ifndef CIRCLEPARAMETRIZER_H_
 #define CIRCLEPARAMETRIZER_H_
 
-#include "Parametrizer2.h"
+#include <glm/detail/type_vec.hpp>
 
-#include "../utils.h"
+#include "ParametrizedPolygon.h"
 
 namespace param {
 
-class CircleParametrizer: public Parametrizer2 {
+class CircleParametrizer {
 public:
-	CircleParametrizer(const SimpleMesh& mesh, float step, glm::vec2 center, float radius);
+	CircleParametrizer(SimpleMesh* mesh, std::size_t steps, glm::vec2 center,
+			float radius);
 	virtual ~CircleParametrizer();
 
-protected:
-	void GetNext(int i, float step, glm::vec2& origin,
-			glm::vec2& direction) const override;
+//	virtual glm::vec2 GetMidPoint();
+
+	Polygon GetPolygon();
+
+	virtual float Parametrize();
+
+//protected:
+//
+//	ParametrizedPolygon();
+//
+//	ParametrizedPolygon(SimpleMesh* mesh, glm::vec2* vertices, std::size_t size,
+//			unsigned char level, std::vector<VertexHolder>* layers);
 
 private:
-	glm::vec2 c;
-	float r;
+	void ComputeNormals();
+
+protected:
+	SimpleMesh* mesh;
+//	ParametrizedPolygon* child;
+
+//	std::size_t size;
+//
+//	float* distances;
+//	glm::vec2* vertices;
+	unsigned char level;
+
+	std::vector<VertexHolder> layers;
+
+private:
+	float radius;
+	glm::vec2 center;
 };
 
-} /* namespace param */
+}
+/* namespace param */
 
 #endif /* CIRCLEPARAMETRIZER_H_ */
