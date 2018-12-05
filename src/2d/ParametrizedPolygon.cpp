@@ -141,6 +141,10 @@ float ParametrizedPolygon::Parametrize() {
 
 			ray.Set(current.vertices[i], current.normals[i]);
 
+			if ( i == 1) {
+				int a = 0;
+			}
+
 			// TODO Add max distance to cast
 			auto casts = caster.Cast(ray, *mesh);
 
@@ -150,6 +154,8 @@ float ParametrizedPolygon::Parametrize() {
 
 			if (casts.size() > 0) {
 				current.distances[i] = casts[0].distance;
+
+				printf("%lu: %f\n", i, casts[0].distance);
 			}
 		}
 	} else {

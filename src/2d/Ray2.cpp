@@ -7,6 +7,8 @@
 
 #include "Ray2.h"
 
+#include <math.h>
+
 #include "../defaults.h"
 #include "../utils.h"
 
@@ -28,6 +30,26 @@ void Ray2::Set(const glm::vec2& origin, const glm::vec2& direction) {
 	dir = direction;
 }
 
+float Ray2::Intersect(const glm::vec2& v1, const glm::vec2& v2) const {
+	auto r = v2 - v1;
+
+	//	intersectionPoint = glm::vec2();
+	auto u = NAN;
+
+	if (!(IsClose(cross(r, dir)) && !IsClose(cross((v1 - orig), r)))) {
+		auto t1 = cross((orig - v1), dir) / cross(r, dir);
+		auto t2 = cross((v1 - orig), r) / cross(dir, r);
+
+//		if ((t1 >= 0) && (t1 <= 1) && (u >= 0)) {
+		if ((t1 >= 0) && (t1 <= 1) && (t2 >= 0)) {
+			//			intersectionPoint = v1 + t * r;
+			u = t2;
+		}
+	}
+
+	return u;
+}
+
 //bool Ray2::Intersect(const glm::vec2& v1, const glm::vec2& v2,
 //		glm::vec2& intersectionPoint) const {
 bool Ray2::Intersect(const glm::vec2& v1, const glm::vec2& v2, float& u) const {
@@ -42,7 +64,7 @@ bool Ray2::Intersect(const glm::vec2& v1, const glm::vec2& v2, float& u) const {
 		auto t1 = cross((orig - v1), dir) / cross(r, dir);
 		auto t2 = cross((v1 - orig), r) / cross(dir, r);
 
-		if ((t1 >= 0) && (t1 <= 1)) {
+		if ((t1 >= 0) && (t1 <= 1) && (t2 >= 0)) {
 //			intersectionPoint = v1 + t * r;
 			u = t2;
 
@@ -62,3 +84,4 @@ glm::vec2 Ray2::GetOrigin() const {
 }
 
 } /* namespace param */
+

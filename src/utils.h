@@ -10,11 +10,17 @@
 
 #include "defaults.h"
 
+#include <vector>
 #include <math.h>
 #include <GL/gl.h>
 #include <glm/vec2.hpp>
 
 namespace param {
+
+struct VertexIndex {
+	std::size_t layer;
+	std::size_t pos;
+};
 
 struct VertexHolder {
 	glm::vec2* vertices;
@@ -36,7 +42,7 @@ struct SimpleMesh {
 	int* indices;
 	std::size_t size;
 
-	void Draw(bool points=false) const {
+	void Draw(bool points = false) const {
 		if (points) {
 			glPointSize(3.0);
 			glBegin(GL_POINTS);
@@ -72,6 +78,14 @@ constexpr bool IsClose(double value, double number = 0,
 		double epsilon = EPSILON) {
 	return fabs(value - number) <= EPSILON;
 }
+
+VertexIndex GetByPosition(const std::vector<VertexHolder>& layers,
+		std::size_t i);
+
+VertexIndex GetByPosition(std::vector<VertexHolder>* layers, std::size_t i);
+
+void ToNormal(glm::vec2& v);
+
 }
 
 #endif /* UTILS_H_ */

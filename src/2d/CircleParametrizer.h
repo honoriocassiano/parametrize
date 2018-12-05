@@ -26,15 +26,8 @@ public:
 
 	virtual float Parametrize();
 
-//protected:
-//
-//	ParametrizedPolygon();
-//
-//	ParametrizedPolygon(SimpleMesh* mesh, glm::vec2* vertices, std::size_t size,
-//			unsigned char level, std::vector<VertexHolder>* layers);
-
-private:
-	void ComputeNormals();
+//private:
+//	void ComputeNormals();
 
 protected:
 	SimpleMesh* mesh;
