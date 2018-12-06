@@ -20,16 +20,23 @@ public:
 			float radius);
 	virtual ~CircleParametrizer();
 
-//	virtual glm::vec2 GetMidPoint();
-
 	Polygon GetPolygon();
 
+	/***
+	 * Compute normals by vertex
+	 */
+	void ComputeNormals();
+
 	virtual float Parametrize();
+
+protected:
+
+	virtual void Cast();
 
 //private:
 //	void ComputeNormals();
 
-protected:
+private:
 	SimpleMesh* mesh;
 //	ParametrizedPolygon* child;
 

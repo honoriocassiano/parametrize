@@ -45,7 +45,7 @@ int main(int argc, char const *argv[]) {
 
 	p.Parametrize();
 
-//	auto poly1 = p.GetPolygon();
+	auto poly1 = p.GetPolygon();
 
 //	f = p.Parametrize();
 //	f = p.Parametrize();
@@ -53,52 +53,52 @@ int main(int argc, char const *argv[]) {
 
 
 //	auto poly2 = p.GetPolygon();
-//
-//	GLFWwindow* window;
-//
-//	/* Initialize the library */
-//	if (!glfwInit())
-//		return -1;
-//
-//	/* Create a windowed mode window and its OpenGL context */
-//	window = glfwCreateWindow(w, h, "Parametrizer", NULL, NULL);
-//	if (!window) {
-//		glfwTerminate();
-//		return -1;
-//	}
-//
-//	/* Make the window's context current */
-//	glfwMakeContextCurrent(window);
-//
-////	glfwSetCursorPosCallback(window, pick/Squares);
-//
-////	glfwSetKeyCallback(window, key_callback);
-//	init(w, h);
-//
-//	/* Loop until the user closes the window */
-//	while (!glfwWindowShouldClose(window)) {
-//		/* Render here */
-//		glClear(GL_COLOR_BUFFER_BIT);
-//
-//		glColor3f(0.5, 0.5, 0.5);
-////		poly1.Draw();
-//		sm.Draw();
-//
-////		glColor3f(1, 0, 0);
-//		glColor3f(1, 1, 1);
-//		poly2.Draw();
-//
+
+	GLFWwindow* window;
+
+	/* Initialize the library */
+	if (!glfwInit())
+		return -1;
+
+	/* Create a windowed mode window and its OpenGL context */
+	window = glfwCreateWindow(w, h, "Parametrizer", NULL, NULL);
+	if (!window) {
+		glfwTerminate();
+		return -1;
+	}
+
+	/* Make the window's context current */
+	glfwMakeContextCurrent(window);
+
+//	glfwSetCursorPosCallback(window, pick/Squares);
+
+//	glfwSetKeyCallback(window, key_callback);
+	init(w, h);
+
+	/* Loop until the user closes the window */
+	while (!glfwWindowShouldClose(window)) {
+		/* Render here */
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		glColor3f(0.5, 0.5, 0.5);
+//		poly1.Draw();
+		sm.Draw();
+
 //		glColor3f(1, 0, 0);
-//		poly2.Draw(true);
-//
-//		/* Swap front and back buffers */
-//		glfwSwapBuffers(window);
-//
-//		/* Poll for and process events */
-//		glfwPollEvents();
-//	}
-//
-//	glfwTerminate();
+		glColor3f(1, 1, 1);
+		poly1.Draw();
+
+		glColor3f(1, 0, 0);
+		poly1.Draw(true);
+
+		/* Swap front and back buffers */
+		glfwSwapBuffers(window);
+
+		/* Poll for and process events */
+		glfwPollEvents();
+	}
+
+	glfwTerminate();
 
 	return 0;
 }
