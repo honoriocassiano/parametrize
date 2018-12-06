@@ -18,7 +18,6 @@
 
 namespace param {
 
-
 ParametrizedPolygon::ParametrizedPolygon() :
 		mesh(nullptr), child(nullptr), level(0), layers(nullptr) {
 }
@@ -43,7 +42,7 @@ ParametrizedPolygon::ParametrizedPolygon(SimpleMesh* _mesh, glm::vec2* vertices,
 		count += layers->back().count;
 	}
 
-	layers->emplace_back(vertices, nullptr, nullptr, size, count);
+	layers->emplace_back(vertices, nullptr, nullptr, nullptr, size, count);
 
 	ComputeNormals();
 }
@@ -145,7 +144,7 @@ float ParametrizedPolygon::Parametrize() {
 
 			ray.Set(current.vertices[i], current.normals[i]);
 
-			if ( i == 1) {
+			if (i == 1) {
 				int a = 0;
 			}
 

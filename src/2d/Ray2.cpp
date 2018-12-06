@@ -52,13 +52,9 @@ float Ray2::Intersect(const glm::vec2& v1, const glm::vec2& v2) const {
 	return u;
 }
 
-//bool Ray2::Intersect(const glm::vec2& v1, const glm::vec2& v2,
-//		glm::vec2& intersectionPoint) const {
 bool Ray2::Intersect(const glm::vec2& v1, const glm::vec2& v2, float& u) const {
 
 	auto r = v2 - v1;
-
-//	intersectionPoint = glm::vec2();
 
 	if (IsClose(cross(r, dir)) && !IsClose(cross((v1 - orig), r))) {
 		return false;
@@ -66,7 +62,8 @@ bool Ray2::Intersect(const glm::vec2& v1, const glm::vec2& v2, float& u) const {
 		auto t1 = cross((orig - v1), dir) / cross(r, dir);
 		auto t2 = cross((v1 - orig), r) / cross(dir, r);
 
-		if ((t1 >= 0) && (t1 <= 1) && (t2 >= 0)) {
+//		if ((t1 >= 0) && (t1 <= 1) && (t2 >= 0)) {
+		if ((t1 >= 0) && (t1 <= 1)) {
 //			intersectionPoint = v1 + t * r;
 			u = t2;
 

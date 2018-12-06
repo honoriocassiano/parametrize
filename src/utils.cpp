@@ -7,6 +7,9 @@
 
 #include "utils.h"
 
+#include <glm/detail/type_vec.hpp>
+#include <cstddef>
+
 namespace param {
 
 VertexIndex GetByPosition(const std::vector<VertexHolder>& layers,

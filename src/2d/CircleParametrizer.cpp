@@ -23,6 +23,7 @@ CircleParametrizer::CircleParametrizer(SimpleMesh* _mesh, std::size_t size,
 
 	auto vertices = new glm::vec2[size];
 	auto normals = new glm::vec2[size];
+	auto actives = new bool[size];
 
 	glm::vec2 lastNormal;
 
@@ -32,9 +33,10 @@ CircleParametrizer::CircleParametrizer(SimpleMesh* _mesh, std::size_t size,
 
 		vertices[i] = glm::vec2(radius * cos(u), radius * sin(u));
 		normals[i] = glm::normalize(center - vertices[i]);
+		actives[i] = true;
 	}
 
-	layers.emplace_back(vertices, normals, nullptr, size, size);
+	layers.emplace_back(vertices, normals, actives, nullptr, size, size);
 }
 
 //void CircleParametrizer::ComputeNormals() {
@@ -87,19 +89,28 @@ Polygon CircleParametrizer::GetPolygon() {
 
 	auto vertices = new glm::vec2[layers.back().count];
 
+	std::size_t pos = 0;
+
 	for (std::size_t i = 0; i < layers.back().count; ++i) {
 		auto currentPos = GetByPosition(layers, i);
 
 		const auto& current = layers.at(currentPos.layer);
 
-		auto v1 = current.vertices[currentPos.pos]
-				+ current.normals[currentPos.pos]
-						* current.distances[currentPos.pos];
+		if (current.active[currentPos.pos]) {
+			auto v1 = current.vertices[currentPos.pos]
+					+ current.normals[currentPos.pos]
+							* current.distances[currentPos.pos];
 
-		vertices[i] = v1;
+			vertices[pos] = v1;
+
+			++pos;
+
+			printf("%f %f\n", v1.x, v1.y);
+		}
 	}
 
-	return Polygon(vertices, layers.back().count);
+//	return Polygon(vertices, layers.back().count);
+	return Polygon(vertices, pos);
 }
 
 void CircleParametrizer::ComputeNormals() {
@@ -129,8 +140,7 @@ void CircleParametrizer::ComputeNormals() {
 		ToNormal(temp1);
 		ToNormal(temp2);
 
-//		layers.at(curr.layer).normals[curr.pos] = (temp1 + temp2) * 0.5f;
-		ref.normals[curr.pos] = (temp1 + temp2) * 0.5f;
+		ref.normals[curr.pos] = -(temp1 + temp2) * 0.5f;
 	}
 }
 
@@ -153,21 +163,21 @@ void CircleParametrizer::Cast() {
 
 		ray.Set(current.vertices[i], current.normals[i]);
 
-		if (i == 1) {
-			int a = 0;
-		}
-
 		// TODO Add max distance to cast
 		auto casts = caster.Cast(ray, *mesh);
 
-		if (casts.size() > 2) {
-			// TODO Mark to recast
-		}
+//		if (casts.size() > 2) {
+//			// TODO Mark to recast
+//		}
 
 		if (casts.size() > 0) {
 			current.distances[i] = casts[0].distance;
 
-			printf("%lu: %f\n", i, casts[0].distance);
+			if (casts[0].distance < 0) {
+				printf("%f\n", casts[0].distance);
+			}
+
+//			printf("%lu: %f\n", i, casts[0].distance);
 		}
 	}
 }
@@ -177,7 +187,6 @@ float CircleParametrizer::Parametrize() {
 //	if (child) {
 //		return child->Parametrize();
 //	} else if (!layers.back().distances) {
-
 
 	if (layers.back().distances) {
 		// Create child
@@ -191,6 +200,13 @@ float CircleParametrizer::Parametrize() {
 		float* newDistances = new float[ref.count];
 		glm::vec2* newNormals = new glm::vec2[ref.count];
 		glm::vec2* newVertices = new glm::vec2[ref.count];
+		bool* newActives = new bool[ref.count];
+
+//		if (layers.size() == 1) {
+//			newActives = new bool[ref.count] { true };
+//		} else {
+//			newActives = new bool[ref.count] { false };
+//		}
 
 		auto currentPos = GetByPosition(layers, 0);
 
@@ -209,6 +225,8 @@ float CircleParametrizer::Parametrize() {
 
 			newVertices[i] = (v1 + v2) * 0.5f;
 
+			newActives[i] = true;
+
 			currentPos = nextPos;
 		}
 
@@ -217,7 +235,7 @@ float CircleParametrizer::Parametrize() {
 //
 //		//	TODO Return this value
 //		child->Parametrize();
-		layers.emplace_back(newVertices, nullptr, newDistances,
+		layers.emplace_back(newVertices, nullptr, newActives, newDistances,
 				layers.back().count, layers.back().count * 2);
 
 		ComputeNormals();

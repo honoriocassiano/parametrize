@@ -36,7 +36,7 @@ CircleParametrizer2::CircleParametrizer2(SimpleMesh* _mesh, std::size_t size,
 	mesh = _mesh;
 	layers = new std::vector<VertexHolder>;
 
-	layers->emplace_back(vertices, normals, nullptr, size, size);
+	layers->emplace_back(vertices, normals, nullptr, nullptr, size, size);
 }
 
 CircleParametrizer2::~CircleParametrizer2() {

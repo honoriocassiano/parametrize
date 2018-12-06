@@ -26,12 +26,13 @@ struct VertexHolder {
 	glm::vec2* vertices;
 	glm::vec2* normals;
 	float* distances;
+	bool* active;
 	std::size_t size;
 	std::size_t count;
 
-	VertexHolder(glm::vec2* _vertices, glm::vec2* _normals, float* _distances,
-			std::size_t _size, std::size_t _count) :
-			vertices(_vertices), normals(_normals), distances(_distances), size(
+	VertexHolder(glm::vec2* _vertices, glm::vec2* _normals, bool* _active,
+			float* _distances, std::size_t _size, std::size_t _count) :
+			vertices(_vertices), normals(_normals), active(_active), distances(_distances), size(
 					_size), count(_count) {
 
 	}
@@ -71,6 +72,7 @@ struct CastEl {
 struct {
 	bool operator()(const CastEl& c1, const CastEl& c2) {
 		return c1.distance <= c2.distance;
+//		return fabs(c1.distance) <= fabs(c2.distance);
 	}
 } castElComp;
 

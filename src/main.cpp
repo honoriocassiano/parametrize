@@ -44,6 +44,7 @@ int main(int argc, char const *argv[]) {
 	auto f = p.Parametrize();
 
 	p.Parametrize();
+	p.Parametrize();
 
 	auto poly1 = p.GetPolygon();
 
