@@ -8,8 +8,6 @@
 #ifndef RAY2_H_
 #define RAY2_H_
 
-#include "Edge2.h"
-
 #include <glm/vec2.hpp>
 
 namespace param {

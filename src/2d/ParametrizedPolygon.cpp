@@ -7,10 +7,14 @@
 
 #include "ParametrizedPolygon.h"
 
+#include <glm/detail/func_geometric.hpp>
+#include <glm/detail/type_vec.hpp>
+#include <glm/detail/type_vec2.hpp>
+#include <cstddef>
+#include <cstdio>
+
 #include "Ray2.h"
 #include "Raycaster2.h"
-
-#include <glm/geometric.hpp>
 
 namespace param {
 

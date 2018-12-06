@@ -7,9 +7,11 @@
 
 #include "Ray2.h"
 
+#include <glm/detail/func_geometric.hpp>
+#include <glm/detail/type_vec.hpp>
+#include <glm/detail/type_vec2.hpp>
 #include <math.h>
 
-#include "../defaults.h"
 #include "../utils.h"
 
 namespace param {

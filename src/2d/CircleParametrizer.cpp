@@ -10,6 +10,7 @@
 #include "Ray2.h"
 #include "Raycaster2.h"
 
+#include <cmath>
 #include <glm/geometric.hpp>
 
 namespace param {
@@ -117,7 +118,6 @@ float CircleParametrizer::Parametrize() {
 
 		auto newVertices = new glm::vec2[size];
 
-//		for (std::size_t i = 0; i < size; ++i) {
 		for (std::size_t i = 0; i < size; ++i) {
 			auto posPrev = GetByPosition(layers, (i + size - 1) % size);
 			auto posCurr = GetByPosition(layers, i);
@@ -142,7 +142,7 @@ float CircleParametrizer::Parametrize() {
 
 //			printf("%d %f %f\n", isnan(u), u, curr.distances[posCurr.pos]);
 
-			if (!isnan(u) && u < curr.distances[posCurr.pos]) {
+			if (!std::isnan(u) && u < curr.distances[posCurr.pos]) {
 //				printf("aaaaa\n");
 				newVertices[i] = curr.vertices[posCurr.pos]
 						+ (u * curr.normals[posCurr.pos]);
@@ -153,9 +153,9 @@ float CircleParametrizer::Parametrize() {
 //				printf("%f\n", prev.distances[posPrev.pos]);
 			} else {
 
-				if (prev.vertices[posPrev.pos]) {
-
-				}
+//				if (prev.vertices[posPrev.pos]) {
+//
+//				}
 
 				newVertices[i] = (prev.vertices[posPrev.pos]
 						+ next.vertices[posNext.pos]) * 0.5f;
