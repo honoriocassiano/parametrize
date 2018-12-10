@@ -115,7 +115,7 @@ void Window::KeyPressed(GLFWwindow * window, int key, int scancode, int action,
 			break;
 
 		case GLFW_KEY_E:
-			ResetScene();
+//			ResetScene();
 			break;
 
 		case GLFW_KEY_U:

@@ -66,11 +66,5 @@ VertexIndex GetByPosition(const std::vector<VertexHolder>& layers,
 
 	return VertexIndex { level, pos };
 }
-
-VertexIndex GetByPosition(std::vector<VertexHolder>* layers, std::size_t i) {
-	return GetByPosition(*layers, i);
 }
-
-}
-;
 

@@ -40,38 +40,6 @@ CircleParametrizer::CircleParametrizer(Polygon* _mesh, std::size_t size,
 	layers.emplace_back(vertices, normals, actives, nullptr, size, size);
 }
 
-//void CircleParametrizer::ComputeNormals() {
-//
-//	auto& ref = layers.back();
-//
-//	ref.normals = new glm::vec2[ref.size];
-//
-//	for (std::size_t i = 1; i < ref.count; i += 2) {
-//
-//		auto prev = GetByPosition(layers, i - 1);
-//		auto curr = GetByPosition(layers, i);
-//		auto next = GetByPosition(layers, (i + 1) % ref.count);
-//
-//		auto v1 = layers.at(prev.layer).vertices[prev.pos]
-//				+ (layers.at(prev.layer).normals[prev.pos]
-//						* layers.at(prev.layer).distances[prev.pos]);
-//
-//		auto v2 = layers.at(curr.layer).vertices[curr.pos];
-//
-//		auto v3 = layers.at(next.layer).vertices[next.pos]
-//				+ (layers.at(next.layer).normals[next.pos]
-//						* layers.at(next.layer).distances[next.pos]);
-//
-//		auto temp1 = glm::normalize(v2 - v1);
-//		auto temp2 = glm::normalize(v3 - v2);
-//
-//		ToNormal(temp1);
-//		ToNormal(temp2);
-//
-//		layers.at(curr.layer).normals[curr.pos] = (temp1 + temp2) * 0.5f;
-//	}
-//}
-
 CircleParametrizer::~CircleParametrizer() {
 
 	for (auto l : layers) {
@@ -185,17 +153,18 @@ void CircleParametrizer::Cast() {
 			}
 		}
 
-		// TODO Add max distance to cast
 		auto casts = caster.Cast(ray, mesh, maxDistanceFront, maxDistanceBack);
 
-		//		if (casts.size() > 2) {
-		//			// TODO Mark to recast
-		//		}
+//		for (const auto& c : casts) {
+//			printf("%f %f %f\n", c.distance, maxDistanceFront, maxDistanceBack);
+//		}
 
 		if (casts.size() > 0) {
 			current.distances[i] = casts[0].distance;
 		}
 	}
+
+//	printf("\n");
 }
 
 void CircleParametrizer::UnParametrize() {
@@ -230,10 +199,6 @@ void CircleParametrizer::UnParametrize() {
 
 float CircleParametrizer::Parametrize() {
 
-//	if (child) {
-//		return child->Parametrize();
-//	} else if (!layers.back().distances) {
-
 	if (layers.back().distances) {
 		// Create child
 		auto& ref = layers.back();
@@ -247,12 +212,6 @@ float CircleParametrizer::Parametrize() {
 		glm::vec2* newNormals = new glm::vec2[ref.count];
 		glm::vec2* newVertices = new glm::vec2[ref.count];
 		bool* newActives = new bool[ref.count];
-
-//		if (layers.size() == 1) {
-//			newActives = new bool[ref.count] { true };
-//		} else {
-//			newActives = new bool[ref.count] { false };
-//		}
 
 		auto currentPos = GetByPosition(layers, 0);
 
@@ -276,11 +235,6 @@ float CircleParametrizer::Parametrize() {
 			currentPos = nextPos;
 		}
 
-//		child = new ParametrizedPolygon(mesh, newVertices, ref.count, level + 1,
-//				layers);
-//
-//		//	TODO Return this value
-//		child->Parametrize();
 		layers.emplace_back(newVertices, nullptr, newActives, newDistances,
 				layers.back().count, layers.back().count * 2);
 
@@ -289,6 +243,7 @@ float CircleParametrizer::Parametrize() {
 
 	Cast();
 
+	// TODO Return some value
 	return 0;
 
 }

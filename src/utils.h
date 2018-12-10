@@ -67,8 +67,6 @@ bool IsClose(float value, float number = 0, float epsilon = EPSILON);
 VertexIndex GetByPosition(const std::vector<VertexHolder>& layers,
 		std::size_t i);
 
-VertexIndex GetByPosition(std::vector<VertexHolder>* layers, std::size_t i);
-
 }
 
 #endif /* UTILS_H_ */

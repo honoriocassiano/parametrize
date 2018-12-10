@@ -7,10 +7,13 @@
 
 #include "Raycaster2.h"
 
+#include <glm/detail/qualifier.hpp>
 #include <glm/detail/type_vec.hpp>
 #include <glm/geometric.hpp>
 #include <algorithm>
+#include <cstdio>
 
+#include "../defaults.h"
 #include "Polygon.h"
 #include "Ray2.h"
 
@@ -43,7 +46,8 @@ std::vector<CastEl> Raycaster2::Cast(const Ray2& ray, Polygon* mesh,
 							glm::length(u * ray.GetDirection()) :
 							-glm::length(u * ray.GetDirection());
 
-			if (distance > maxDistanceBack && distance < maxDistanceFront) {
+			if ((distance + EPSILON) > maxDistanceBack
+					&& (distance - EPSILON) < maxDistanceFront) {
 				auto in = (glm::dot(normal, ray.GetDirection()) >= 0);
 
 				casts.emplace_back(distance, in);
