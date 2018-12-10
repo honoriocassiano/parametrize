@@ -7,8 +7,12 @@
 
 #include "Raycaster2.h"
 
-#include <algorithm>
+#include <glm/detail/type_vec.hpp>
 #include <glm/geometric.hpp>
+#include <algorithm>
+
+#include "Polygon.h"
+#include "Ray2.h"
 
 namespace param {
 
@@ -18,7 +22,8 @@ Raycaster2::Raycaster2() {
 Raycaster2::~Raycaster2() {
 }
 
-std::vector<CastEl> Raycaster2::Cast(const Ray2& ray, const Polygon& mesh) {
+std::vector<CastEl> Raycaster2::Cast(const Ray2& ray, const Polygon& mesh,
+		float maxDistanceFront, float maxDistanceBack) {
 
 //	glm::vec2 intPoint;
 	float u;
@@ -41,10 +46,11 @@ std::vector<CastEl> Raycaster2::Cast(const Ray2& ray, const Polygon& mesh) {
 							glm::length(u * ray.GetDirection()) :
 							-glm::length(u * ray.GetDirection());
 
-			auto in = (glm::dot(normal, ray.GetDirection()) >= 0);
+			if (distance > maxDistanceBack && distance < maxDistanceFront) {
+				auto in = (glm::dot(normal, ray.GetDirection()) >= 0);
 
-			casts.emplace_back(distance, in);
-
+				casts.emplace_back(distance, in);
+			}
 		}
 	}
 

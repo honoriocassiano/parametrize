@@ -8,12 +8,13 @@
 #ifndef UTILS_H_
 #define UTILS_H_
 
-#include "defaults.h"
-
-#include <vector>
+#include <glm/detail/type_vec.hpp>
+#include <glm/detail/type_vec2.hpp>
 #include <math.h>
-#include <GL/gl.h>
-#include <glm/vec2.hpp>
+#include <cstddef>
+#include <vector>
+
+#include "defaults.h"
 
 namespace param {
 

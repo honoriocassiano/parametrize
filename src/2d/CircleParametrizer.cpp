@@ -158,18 +158,45 @@ void CircleParametrizer::Cast() {
 
 	ref.distances = new float[ref.size];
 
+	auto polygon = GetPolygon();
+
 	for (std::size_t i = 0; i < layers.back().size; ++i) {
 
 		auto current = layers.back();
 
 		ray.Set(current.vertices[i], current.normals[i]);
 
-		// TODO Add max distance to cast
-		auto casts = caster.Cast(ray, *mesh);
+		auto maxDistanceFront = INFINITY;
+		auto maxDistanceBack = -INFINITY;
 
-//		if (casts.size() > 2) {
-//			// TODO Mark to recast
-//		}
+		auto meshCasts = caster.Cast(ray, polygon);
+
+		for (std::size_t j = 0; j < meshCasts.size(); ++j) {
+			auto d = meshCasts[j].distance;
+
+			if (IsClose(d, 0)) {
+				// TODO IGNORE IT ALL
+				current.distances[i] = 0;
+
+				printf("aaaaa\n");
+
+				break;
+			} else {
+				if (d < 0 && d > maxDistanceBack) {
+					maxDistanceBack = d;
+				} else if (d > 0 && d < maxDistanceFront) {
+					maxDistanceFront = d;
+				}
+			}
+		}
+
+		// TODO Add max distance to cast
+//		auto casts = caster.Cast(ray, *mesh);
+		auto casts = caster.Cast(ray, *mesh, maxDistanceFront, maxDistanceBack);
+
+		//		if (casts.size() > 2) {
+		//			// TODO Mark to recast
+		//		}
 
 		if (casts.size() > 0) {
 			current.distances[i] = casts[0].distance;
@@ -178,8 +205,9 @@ void CircleParametrizer::Cast() {
 				printf("%f\n", casts[0].distance);
 			}
 
-//			printf("%lu: %f\n", i, casts[0].distance);
+			//			printf("%lu: %f\n", i, casts[0].distance);
 		}
+
 	}
 }
 

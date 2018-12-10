@@ -8,11 +8,15 @@
 #ifndef RAYCASTER2_H_
 #define RAYCASTER2_H_
 
+#include <cmath>
 #include <vector>
 
 #include "../utils.h"
-#include "Polygon.h"
-#include "Ray2.h"
+
+namespace param {
+struct Polygon;
+class Ray2;
+} /* namespace param */
 
 namespace param {
 
@@ -21,7 +25,9 @@ public:
 	Raycaster2();
 	virtual ~Raycaster2();
 
-	std::vector<CastEl> Cast(const Ray2& ray, const Polygon& mesh);
+	std::vector<CastEl> Cast(const Ray2& ray, const Polygon& mesh,
+			float maxDistanceFront = INFINITY,
+			float maxDistanceBack = -INFINITY);
 };
 } /* namespace param */
 

@@ -8,7 +8,8 @@
 #ifndef RAY2_H_
 #define RAY2_H_
 
-#include <glm/vec2.hpp>
+#include <glm/detail/type_vec.hpp>
+#include <glm/detail/type_vec2.hpp>
 
 namespace param {
 
