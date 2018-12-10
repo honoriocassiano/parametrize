@@ -81,9 +81,7 @@ void Window::Run() {
 
 		if (originalPolygon) {
 			glColor3f(0.5, 0.5, 0.5);
-			//		poly1.Draw();
 			originalPolygon->Draw();
-			//		sm.Draw();
 		}
 
 		if (parametrizedPolygon) {
@@ -102,10 +100,6 @@ void Window::Run() {
 	}
 
 	glfwTerminate();
-}
-
-void Window::ProcessEvents() {
-//	glfwSetWindowShouldClose(window, GLFW_FALSE);
 }
 
 void Window::KeyPressed(GLFWwindow * window, int key, int scancode, int action,

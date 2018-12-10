@@ -34,8 +34,6 @@ private:
 	static void Parametrize();
 	static void UnParametrize();
 
-	void ProcessEvents();
-
 	void Init();
 
 public:
