@@ -8,9 +8,10 @@
 #ifndef UTILS_H_
 #define UTILS_H_
 
+#include <ext/type_traits.h>
 #include <glm/detail/type_vec.hpp>
-#include <glm/detail/type_vec2.hpp>
-#include <math.h>
+#include <algorithm>
+#include <cmath>
 #include <cstddef>
 #include <vector>
 
@@ -33,8 +34,8 @@ struct VertexHolder {
 
 	VertexHolder(glm::vec2* _vertices, glm::vec2* _normals, bool* _active,
 			float* _distances, std::size_t _size, std::size_t _count) :
-			vertices(_vertices), normals(_normals), active(_active), distances(_distances), size(
-					_size), count(_count) {
+			vertices(_vertices), normals(_normals), active(_active), distances(
+					_distances), size(_size), count(_count) {
 
 	}
 };
@@ -56,10 +57,7 @@ struct {
 	}
 } castElComp;
 
-constexpr bool IsClose(double value, double number = 0,
-		double epsilon = EPSILON) {
-	return fabs(value - number) <= EPSILON;
-}
+bool IsClose(float value, float number = 0, float epsilon = EPSILON);
 
 VertexIndex GetByPosition(const std::vector<VertexHolder>& layers,
 		std::size_t i);

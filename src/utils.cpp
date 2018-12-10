@@ -8,9 +8,15 @@
 #include "utils.h"
 
 #include <glm/detail/type_vec.hpp>
+#include <glm/detail/type_vec2.hpp>
 #include <cstddef>
 
 namespace param {
+
+bool IsClose(float value, float number, float epsilon) {
+	return fabs(value - number)
+			<= std::max(0.0f * std::max(abs(value), abs(number)), 0.0f);
+}
 
 VertexIndex GetByPosition(const std::vector<VertexHolder>& layers,
 		std::size_t i) {
