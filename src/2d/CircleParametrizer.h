@@ -10,13 +10,17 @@
 
 #include <glm/detail/type_vec.hpp>
 
-#include "ParametrizedPolygon.h"
+#include "../utils.h"
+#include "Polygon.h"
+
+#include <vector>
+#include <glm/vec2.hpp>
 
 namespace param {
 
 class CircleParametrizer {
 public:
-	CircleParametrizer(SimpleMesh* mesh, std::size_t steps, glm::vec2 center,
+	CircleParametrizer(Polygon* mesh, std::size_t steps, glm::vec2 center,
 			float radius);
 	virtual ~CircleParametrizer();
 
@@ -37,7 +41,7 @@ protected:
 //	void ComputeNormals();
 
 private:
-	SimpleMesh* mesh;
+	Polygon* mesh;
 //	ParametrizedPolygon* child;
 
 //	std::size_t size;

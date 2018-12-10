@@ -11,7 +11,7 @@
 #include <vector>
 
 #include "../utils.h"
-#include "Edge2.h"
+#include "Polygon.h"
 #include "Ray2.h"
 
 namespace param {
@@ -21,7 +21,7 @@ public:
 	Raycaster2();
 	virtual ~Raycaster2();
 
-	std::vector<CastEl> Cast(const Ray2& ray, const SimpleMesh& mesh);
+	std::vector<CastEl> Cast(const Ray2& ray, const Polygon& mesh);
 };
 } /* namespace param */
 

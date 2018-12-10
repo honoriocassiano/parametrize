@@ -12,18 +12,16 @@
 
 namespace param {
 
-class Polygon {
+struct Polygon {
 public:
-	Polygon(glm::vec2* positions, std::size_t size);
+	Polygon(glm::vec2* vertices, std::size_t size);
 
 	void Draw(bool points = false) const;
 
 	virtual ~Polygon();
 
-private:
 
-	glm::vec2* positions;
-
+	glm::vec2* vertices;
 	std::size_t size;
 };
 

@@ -10,12 +10,13 @@
 #include "Ray2.h"
 #include "Raycaster2.h"
 
+#include <stdio.h>
 #include <cmath>
 #include <glm/geometric.hpp>
 
 namespace param {
 
-CircleParametrizer::CircleParametrizer(SimpleMesh* _mesh, std::size_t size,
+CircleParametrizer::CircleParametrizer(Polygon* _mesh, std::size_t size,
 		glm::vec2 _center, float _radius) :
 		mesh(_mesh), center(_center), radius(_radius), level(0) {
 

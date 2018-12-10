@@ -13,8 +13,8 @@
 
 namespace param {
 
-Polygon::Polygon(glm::vec2* _positions, std::size_t _size) :
-		positions(_positions), size(_size) {
+Polygon::Polygon(glm::vec2* _vertices, std::size_t _size) :
+		vertices(_vertices), size(_size) {
 }
 
 void Polygon::Draw(bool points) const {
@@ -27,14 +27,14 @@ void Polygon::Draw(bool points) const {
 	}
 
 	for (std::size_t i = 0; i < size; ++i) {
-		glVertex2f(positions[i].x, positions[i].y);
+		glVertex2f(vertices[i].x, vertices[i].y);
 	}
 
 	glEnd();
 }
 
 Polygon::~Polygon() {
-	delete[] positions;
+	delete vertices;
 }
 
 } /* namespace param */

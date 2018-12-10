@@ -38,27 +38,6 @@ struct VertexHolder {
 	}
 };
 
-struct SimpleMesh {
-	glm::vec2* vertices;
-	int* indices;
-	std::size_t size;
-
-	void Draw(bool points = false) const {
-		if (points) {
-			glPointSize(3.0);
-			glBegin(GL_POINTS);
-		} else {
-			glBegin(GL_LINE_LOOP);
-		}
-
-		for (std::size_t i = 0; i < size; ++i) {
-			glVertex2f(vertices[indices[i]].x, vertices[indices[i]].y);
-		}
-
-		glEnd();
-	}
-};
-
 struct CastEl {
 	float distance;
 	bool in;

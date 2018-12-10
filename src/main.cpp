@@ -1,16 +1,12 @@
-#include <GLFW/glfw3.h>
-#include <GL/glu.h>
-
 #include <glm/detail/type_vec.hpp>
-#include <glm/detail/type_vec2.hpp>
 #include <GL/gl.h>
+#include <GL/glu.h>
+#include <GLFW/glfw3.h>
 #include <cstddef>
-#include <vector>
 
 #include "2d/CircleParametrizer.h"
-#include "2d/Edge2.h"
 #include "2d/Polygon.h"
-#include "2d/CircleParametrizer2.h"
+#include "utils.h"
 
 using namespace param;
 
@@ -33,9 +29,10 @@ int main(int argc, char const *argv[]) {
 			glm::vec2(x, -y), glm::vec2(0.25, -0.25), glm::vec2(0.5, 0.5),
 			glm::vec2(-0.5, 0.5), glm::vec2(-0.25, -0.25) };
 
-	int idx[8] = { 0, 1, 2, 3, 4, 5, 6, 7 };
-
-	SimpleMesh sm { ps, idx, 8 };
+//	int idx[8] = { 0, 1, 2, 3, 4, 5, 6, 7 };
+//
+//	SimpleMesh sm { ps, idx, 8 };
+	Polygon sm { ps, 8 };
 
 	CircleParametrizer p(&sm, 4, glm::vec2(), 4);
 //	CircleParametrizer2 p(&sm, 4, glm::vec2(), 3);
@@ -44,14 +41,12 @@ int main(int argc, char const *argv[]) {
 	auto f = p.Parametrize();
 
 	p.Parametrize();
-	p.Parametrize();
+//	p.Parametrize();
 
 	auto poly1 = p.GetPolygon();
 
 //	f = p.Parametrize();
 //	f = p.Parametrize();
-
-
 
 //	auto poly2 = p.GetPolygon();
 
