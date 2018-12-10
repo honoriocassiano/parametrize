@@ -11,6 +11,19 @@
 #include <glm/detail/type_vec2.hpp>
 #include <cstddef>
 
+namespace glm {
+glm::vec2& normal(glm::vec2&& v) {
+	auto tmp = v.x;
+	v.x = -v.y;
+	v.y = tmp;
+	return v;
+}
+
+float cross(const glm::vec2& v1, const glm::vec2& v2) {
+	return (v1.x * v2.y) - (v1.y * v2.x);
+}
+}
+
 namespace param {
 
 bool IsClose(float value, float number, float epsilon) {
@@ -58,11 +71,6 @@ VertexIndex GetByPosition(std::vector<VertexHolder>* layers, std::size_t i) {
 	return GetByPosition(*layers, i);
 }
 
-void ToNormal(glm::vec2& v) {
-	auto tmp = v.x;
-	v.x = -v.y;
-	v.y = tmp;
-}
 }
 ;
 

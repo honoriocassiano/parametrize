@@ -17,6 +17,12 @@
 
 #include "defaults.h"
 
+namespace glm {
+glm::vec2& normal(glm::vec2&& v);
+
+float cross(const glm::vec2& v1, const glm::vec2& v2);
+}
+
 namespace param {
 
 struct VertexIndex {
@@ -53,7 +59,6 @@ struct CastEl {
 struct {
 	bool operator()(const CastEl& c1, const CastEl& c2) {
 		return c1.distance <= c2.distance;
-//		return fabs(c1.distance) <= fabs(c2.distance);
 	}
 } castElComp;
 
@@ -63,8 +68,6 @@ VertexIndex GetByPosition(const std::vector<VertexHolder>& layers,
 		std::size_t i);
 
 VertexIndex GetByPosition(std::vector<VertexHolder>* layers, std::size_t i);
-
-void ToNormal(glm::vec2& v);
 
 }
 

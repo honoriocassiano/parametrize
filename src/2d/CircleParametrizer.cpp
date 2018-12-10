@@ -135,11 +135,8 @@ void CircleParametrizer::ComputeNormals() {
 				+ (layers.at(next.layer).normals[next.pos]
 						* layers.at(next.layer).distances[next.pos]);
 
-		auto temp1 = glm::normalize(v2 - v1);
-		auto temp2 = glm::normalize(v3 - v2);
-
-		ToNormal(temp1);
-		ToNormal(temp2);
+		auto temp1 = glm::normal(glm::normalize(v2 - v1));
+		auto temp2 = glm::normal(glm::normalize(v3 - v2));
 
 		ref.normals[curr.pos] = -(temp1 + temp2) * 0.5f;
 	}
