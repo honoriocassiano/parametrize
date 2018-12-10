@@ -24,7 +24,7 @@ public:
 			float radius);
 	virtual ~CircleParametrizer();
 
-	Polygon GetPolygon();
+	Polygon* GetPolygon();
 
 	/***
 	 * Compute normals by vertex
@@ -32,6 +32,7 @@ public:
 	void ComputeNormals();
 
 	virtual float Parametrize();
+	void UnParametrize();
 
 protected:
 

@@ -22,25 +22,22 @@ Raycaster2::Raycaster2() {
 Raycaster2::~Raycaster2() {
 }
 
-std::vector<CastEl> Raycaster2::Cast(const Ray2& ray, const Polygon& mesh,
+std::vector<CastEl> Raycaster2::Cast(const Ray2& ray, Polygon* mesh,
 		float maxDistanceFront, float maxDistanceBack) {
 
-//	glm::vec2 intPoint;
 	float u;
 	std::vector<CastEl> casts;
 
-	for (int i = 0; i < mesh.size; ++i) {
+	for (int i = 0; i < mesh->size; ++i) {
 
-		auto v1 = mesh.vertices[i];
-		auto v2 = mesh.vertices[(i + 1) % mesh.size];
+		auto v1 = mesh->vertices[i];
+		auto v2 = mesh->vertices[(i + 1) % mesh->size];
 
-//		if (ray.Intersect(v1, v2, intPoint)) {
 		if (ray.Intersect(v1, v2, u)) {
 
 			auto normal = (v2 - v1);
 			normal = glm::vec2(normal.y, -normal.x);
 
-//			auto distance = glm::distance(ray.GetOrigin(), intPoint);
 			auto distance =
 					(u >= 0) ?
 							glm::length(u * ray.GetDirection()) :

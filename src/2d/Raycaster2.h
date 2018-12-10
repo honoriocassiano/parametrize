@@ -25,7 +25,7 @@ public:
 	Raycaster2();
 	virtual ~Raycaster2();
 
-	std::vector<CastEl> Cast(const Ray2& ray, const Polygon& mesh,
+	std::vector<CastEl> Cast(const Ray2& ray, Polygon* mesh,
 			float maxDistanceFront = INFINITY,
 			float maxDistanceBack = -INFINITY);
 };

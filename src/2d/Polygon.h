@@ -8,7 +8,9 @@
 #ifndef POLYGON_H_
 #define POLYGON_H_
 
-#include <glm/vec2.hpp>
+#include <glm/detail/type_vec.hpp>
+#include <glm/detail/type_vec2.hpp>
+#include <cstddef>
 
 namespace param {
 
@@ -19,7 +21,6 @@ public:
 	void Draw(bool points = false) const;
 
 	virtual ~Polygon();
-
 
 	glm::vec2* vertices;
 	std::size_t size;

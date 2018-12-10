@@ -74,19 +74,21 @@ CircleParametrizer::CircleParametrizer(Polygon* _mesh, std::size_t size,
 
 CircleParametrizer::~CircleParametrizer() {
 
-	auto temp = layers.back();
+	for (auto l : layers) {
+		if (l.distances) {
+			delete l.distances;
+		}
 
-	delete[] temp.vertices;
-	delete[] temp.normals;
+		if (l.active) {
+			delete l.active;
+		}
 
-	if (temp.distances) {
-		delete temp.distances;
+		delete l.vertices;
+		delete l.normals;
 	}
-
-	layers.pop_back();
 }
 
-Polygon CircleParametrizer::GetPolygon() {
+Polygon* CircleParametrizer::GetPolygon() {
 
 	auto vertices = new glm::vec2[layers.back().count];
 
@@ -111,7 +113,7 @@ Polygon CircleParametrizer::GetPolygon() {
 	}
 
 //	return Polygon(vertices, layers.back().count);
-	return Polygon(vertices, pos);
+	return new Polygon(vertices, pos);
 }
 
 void CircleParametrizer::ComputeNormals() {
@@ -191,8 +193,7 @@ void CircleParametrizer::Cast() {
 		}
 
 		// TODO Add max distance to cast
-//		auto casts = caster.Cast(ray, *mesh);
-		auto casts = caster.Cast(ray, *mesh, maxDistanceFront, maxDistanceBack);
+		auto casts = caster.Cast(ray, mesh, maxDistanceFront, maxDistanceBack);
 
 		//		if (casts.size() > 2) {
 		//			// TODO Mark to recast
@@ -208,6 +209,36 @@ void CircleParametrizer::Cast() {
 			//			printf("%lu: %f\n", i, casts[0].distance);
 		}
 
+	}
+}
+
+void CircleParametrizer::UnParametrize() {
+
+	if (layers.size() > 1) {
+
+		auto& l = layers.back();
+
+		if (l.distances) {
+			delete l.distances;
+		}
+
+		if (l.active) {
+			delete l.active;
+		}
+
+		delete l.vertices;
+		delete l.normals;
+
+		layers.pop_back();
+	} else if (layers.size() == 1) {
+
+		auto& l = layers.back();
+
+		if (l.distances) {
+			delete l.distances;
+
+			l.distances = nullptr;
+		}
 	}
 }
 

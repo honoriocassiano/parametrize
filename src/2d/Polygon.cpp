@@ -9,8 +9,6 @@
 
 #include <GL/gl.h>
 
-#include <stdio.h>
-
 namespace param {
 
 Polygon::Polygon(glm::vec2* _vertices, std::size_t _size) :
