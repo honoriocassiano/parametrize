@@ -108,11 +108,9 @@ Polygon* CircleParametrizer::GetPolygon() {
 
 			++pos;
 
-			printf("%f %f\n", v1.x, v1.y);
 		}
 	}
 
-//	return Polygon(vertices, layers.back().count);
 	return new Polygon(vertices, pos);
 }
 
@@ -180,8 +178,6 @@ void CircleParametrizer::Cast() {
 				// TODO IGNORE IT ALL
 				current.distances[i] = 0;
 
-				printf("aaaaa\n");
-
 				break;
 			} else {
 				if (d < 0 && d > maxDistanceBack) {
@@ -201,14 +197,7 @@ void CircleParametrizer::Cast() {
 
 		if (casts.size() > 0) {
 			current.distances[i] = casts[0].distance;
-
-			if (casts[0].distance < 0) {
-				printf("%f\n", casts[0].distance);
-			}
-
-			//			printf("%lu: %f\n", i, casts[0].distance);
 		}
-
 	}
 }
 
