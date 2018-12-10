@@ -49,8 +49,13 @@ Window::~Window() {
 		delete originalPolygon;
 	}
 
+	if (parametrizedPolygon) {
+		delete parametrizedPolygon;
+	}
+
 	window = nullptr;
 	originalPolygon = nullptr;
+	parametrizedPolygon = nullptr;
 
 	width = 0;
 	height = 0;
@@ -121,6 +126,11 @@ void Window::KeyPressed(GLFWwindow * window, int key, int scancode, int action,
 		case GLFW_KEY_U:
 			UnParametrize();
 			break;
+
+		case GLFW_KEY_ESCAPE:
+			glfwSetWindowShouldClose(window, GLFW_TRUE);
+			break;
+
 		}
 
 	}
