@@ -40,10 +40,6 @@ VertexIndex GetByPosition(const std::vector<VertexHolder>& layers,
 	std::size_t level = 0, pos = 0;
 	std::size_t levels = layers.size();
 
-	if (i >= layers.back().count) {
-		return VertexIndex { 0, 0 };
-	}
-
 	if (layers.size() == 3 && i == 2) {
 		int a = 1;
 	}

@@ -18,7 +18,7 @@ namespace param {
 
 CircleParametrizer::CircleParametrizer(Polygon* _mesh, std::size_t size,
 		glm::vec2 _center, float _radius) :
-		mesh(_mesh), center(_center), radius(_radius), level(0) {
+		mesh(_mesh), numRays(size), center(_center), radius(_radius) {
 
 	auto step = 1.0 / size;
 
@@ -37,7 +37,7 @@ CircleParametrizer::CircleParametrizer(Polygon* _mesh, std::size_t size,
 		actives[i] = true;
 	}
 
-	layers.emplace_back(vertices, normals, actives, nullptr, size, size);
+	layers.emplace_back(vertices, normals, nullptr);
 }
 
 CircleParametrizer::~CircleParametrizer() {
@@ -47,10 +47,6 @@ CircleParametrizer::~CircleParametrizer() {
 			delete l.distances;
 		}
 
-		if (l.active) {
-			delete l.active;
-		}
-
 		delete l.vertices;
 		delete l.normals;
 	}
@@ -58,40 +54,37 @@ CircleParametrizer::~CircleParametrizer() {
 
 Polygon* CircleParametrizer::GetPolygon() {
 
-	auto vertices = new glm::vec2[layers.back().count];
+	auto vertices = new glm::vec2[Count()];
 
-	std::size_t pos = 0;
-
-	for (std::size_t i = 0; i < layers.back().count; ++i) {
+	for (std::size_t i = 0; i < Count(); ++i) {
 		auto currentPos = GetByPosition(layers, i);
 
 		const auto& current = layers.at(currentPos.layer);
 
-		if (current.active[currentPos.pos]) {
-			auto v1 = current.vertices[currentPos.pos]
-					+ current.normals[currentPos.pos]
-							* current.distances[currentPos.pos];
+		auto v1 = current.vertices[currentPos.pos]
+				+ current.normals[currentPos.pos]
+						* current.distances[currentPos.pos];
 
-			vertices[pos] = v1;
+		vertices[i] = v1;
 
-			++pos;
-
-		}
 	}
 
-	return new Polygon(vertices, pos);
+	return new Polygon(vertices, Count());
 }
 
 void CircleParametrizer::ComputeNormals() {
 	auto& ref = layers.back();
 
-	ref.normals = new glm::vec2[ref.size];
+	auto count = Count();
+	auto size = Size(layers.size() - 1);
 
-	for (std::size_t i = 1; i < ref.count; i += 2) {
+	ref.normals = new glm::vec2[size];
+
+	for (std::size_t i = 1; i < count; i += 2) {
 
 		auto prev = GetByPosition(layers, i - 1);
 		auto curr = GetByPosition(layers, i);
-		auto next = GetByPosition(layers, (i + 1) % ref.count);
+		auto next = GetByPosition(layers, (i + 1) % count);
 
 		auto v1 = layers.at(prev.layer).vertices[prev.pos]
 				+ (layers.at(prev.layer).normals[prev.pos]
@@ -110,6 +103,14 @@ void CircleParametrizer::ComputeNormals() {
 	}
 }
 
+std::size_t CircleParametrizer::Count() const {
+	return (1l << layers.size() - 1l) * numRays;
+}
+
+std::size_t CircleParametrizer::Size(std::size_t level) const {
+	return (1 << level) * numRays;
+}
+
 void CircleParametrizer::Cast() {
 	auto& ref = layers.back();
 	// Calc distances
@@ -118,14 +119,16 @@ void CircleParametrizer::Cast() {
 	Ray2 ray(origin, direction);
 	Raycaster2 caster;
 
-	float* newDistances = new float[ref.size];
-	glm::vec2* newVertices = new glm::vec2[ref.size];
+	auto size = Size(layers.size() - 1);
 
-	ref.distances = new float[ref.size];
+	float* newDistances = new float[size];
+	glm::vec2* newVertices = new glm::vec2[size];
+
+	ref.distances = new float[size];
 
 	auto polygon = GetPolygon();
 
-	for (std::size_t i = 0; i < layers.back().size; ++i) {
+	for (std::size_t i = 0; i < size; ++i) {
 
 		auto current = layers.back();
 
@@ -177,10 +180,6 @@ void CircleParametrizer::UnParametrize() {
 			delete l.distances;
 		}
 
-		if (l.active) {
-			delete l.active;
-		}
-
 		delete l.vertices;
 		delete l.normals;
 
@@ -202,21 +201,22 @@ float CircleParametrizer::Parametrize() {
 	if (layers.back().distances) {
 		// Create child
 		auto& ref = layers.back();
+		auto count = Count();
 
 		glm::vec2 origin, direction;
 
 		Ray2 ray(origin, direction);
 		Raycaster2 caster;
 
-		float* newDistances = new float[ref.count];
-		glm::vec2* newNormals = new glm::vec2[ref.count];
-		glm::vec2* newVertices = new glm::vec2[ref.count];
-		bool* newActives = new bool[ref.count];
+		float* newDistances = new float[count];
+		glm::vec2* newNormals = new glm::vec2[count];
+		glm::vec2* newVertices = new glm::vec2[count];
+//		bool* newActives = new bool[count];
 
 		auto currentPos = GetByPosition(layers, 0);
 
-		for (std::size_t i = 0; i < layers.back().count; ++i) {
-			auto nextPos = GetByPosition(layers, (i + 1) % layers.back().count);
+		for (std::size_t i = 0; i < count; ++i) {
+			auto nextPos = GetByPosition(layers, (i + 1) % count);
 
 			const auto& current = layers.at(currentPos.layer);
 			const auto& next = layers.at(nextPos.layer);
@@ -230,13 +230,10 @@ float CircleParametrizer::Parametrize() {
 
 			newVertices[i] = (v1 + v2) * 0.5f;
 
-			newActives[i] = true;
-
 			currentPos = nextPos;
 		}
 
-		layers.emplace_back(newVertices, nullptr, newActives, newDistances,
-				layers.back().count, layers.back().count * 2);
+		layers.emplace_back(newVertices, nullptr, newDistances);
 
 		ComputeNormals();
 	}

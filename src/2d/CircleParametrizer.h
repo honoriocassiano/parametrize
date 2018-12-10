@@ -26,34 +26,29 @@ public:
 
 	Polygon* GetPolygon();
 
+	virtual float Parametrize();
+	void UnParametrize();
+
+private:
 	/***
 	 * Compute normals by vertex
 	 */
 	void ComputeNormals();
 
-	virtual float Parametrize();
-	void UnParametrize();
+	std::size_t Size(std::size_t level) const;
+	std::size_t Count() const;
 
 protected:
 
 	virtual void Cast();
 
-//private:
-//	void ComputeNormals();
-
 private:
 	Polygon* mesh;
-//	ParametrizedPolygon* child;
-
-//	std::size_t size;
-//
-//	float* distances;
-//	glm::vec2* vertices;
-	unsigned char level;
 
 	std::vector<VertexHolder> layers;
 
 private:
+	std::size_t numRays;
 	float radius;
 	glm::vec2 center;
 };
