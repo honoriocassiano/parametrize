@@ -25,6 +25,14 @@ float cross(const glm::vec2& v1, const glm::vec2& v2);
 
 namespace param {
 
+struct VertexHolder;
+struct VertexIndex;
+
+bool closeto(float v1, float v2, float rtol = REL_TOL, float atol = ABS_TOL);
+
+VertexIndex GetByPosition(const std::vector<VertexHolder>& layers,
+		std::size_t i);
+
 struct VertexIndex {
 	std::size_t layer;
 	std::size_t pos;
@@ -43,24 +51,28 @@ struct VertexHolder {
 
 struct CastEl {
 	float distance;
+	float u;
 	bool in;
 
-	CastEl(float distance, bool in) :
-			distance(distance), in(in) {
+	CastEl(float distance, float u, bool in) :
+			distance(distance), u(u), in(in) {
 
 	}
 };
 
 struct {
 	bool operator()(const CastEl& c1, const CastEl& c2) {
+//		if (closeto(c1.distance, 0)) {
+//			return true;
+//		} else if (closeto(c2.distance, 0)) {
+//			return false;
+//		}
+//
+//		return c1.distance <= c2.distance;
+
 		return c1.distance <= c2.distance;
 	}
 } castElComp;
-
-bool IsClose(float value, float number = 0, float epsilon = EPSILON);
-
-VertexIndex GetByPosition(const std::vector<VertexHolder>& layers,
-		std::size_t i);
 
 }
 

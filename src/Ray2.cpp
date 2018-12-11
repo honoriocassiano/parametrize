@@ -30,7 +30,7 @@ float Ray2::Intersect(const glm::vec2& v1, const glm::vec2& v2) const {
 
 	auto u = NAN;
 
-	if (!(IsClose(cross(r, dir)) && !IsClose(cross((v1 - orig), r)))) {
+	if (!(closeto(cross(r, dir), 0) && !closeto(cross((v1 - orig), r), 0))) {
 		auto t1 = cross((orig - v1), dir) / cross(r, dir);
 		auto t2 = cross((v1 - orig), r) / cross(dir, r);
 
@@ -42,17 +42,18 @@ float Ray2::Intersect(const glm::vec2& v1, const glm::vec2& v2) const {
 	return u;
 }
 
-bool Ray2::Intersect(const glm::vec2& v1, const glm::vec2& v2, float& u) const {
+bool Ray2::Intersect(const glm::vec2& v1, const glm::vec2& v2, float& t, float& u) const {
 
 	auto r = v2 - v1;
 
-	if (IsClose(cross(r, dir)) && !IsClose(cross((v1 - orig), r))) {
+	if (closeto(cross(r, dir), 0) && !closeto(cross((v1 - orig), r), 0)) {
 		return false;
 	} else {
 		auto t1 = cross((orig - v1), dir) / cross(r, dir);
 		auto t2 = cross((v1 - orig), r) / cross(dir, r);
 
 		if ((t1 >= 0) && (t1 <= 1)) {
+			t = t1;
 			u = t2;
 
 			return true;

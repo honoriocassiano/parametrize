@@ -22,7 +22,8 @@ public:
 
 	void Set(const glm::vec2& origin, const glm::vec2& direction);
 
-	bool Intersect(const glm::vec2& v1, const glm::vec2& v2, float& u) const;
+	bool Intersect(const glm::vec2& v1, const glm::vec2& v2, float& t,
+			float& u) const;
 	float Intersect(const glm::vec2& v1, const glm::vec2& v2) const;
 
 	glm::vec2 GetDirection() const;

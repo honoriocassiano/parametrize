@@ -8,6 +8,7 @@
 #ifndef DEFAULTS_H_
 #define DEFAULTS_H_
 
-#define EPSILON 1e-05
+#define REL_TOL 1e-05f
+#define ABS_TOL 1e-09f
 
 #endif /* DEFAULTS_H_ */
