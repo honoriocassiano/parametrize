@@ -7,13 +7,12 @@
 
 #include "Raycaster2.h"
 
-#include <glm/detail/qualifier.hpp>
 #include <glm/detail/type_vec.hpp>
 #include <glm/geometric.hpp>
 #include <algorithm>
 #include <cstdio>
 
-#include "../defaults.h"
+#include "defaults.h"
 #include "Polygon.h"
 #include "Ray2.h"
 

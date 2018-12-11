@@ -4,8 +4,8 @@
 #include <X11/X.h>
 #include <cstddef>
 
-#include "2d/CircleParametrizer.h"
-#include "2d/Polygon.h"
+#include "CircleParametrizer.h"
+#include "Polygon.h"
 #include "Window.h"
 
 using namespace param;

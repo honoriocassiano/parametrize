@@ -10,7 +10,7 @@
 
 #include <glm/detail/type_vec.hpp>
 
-#include "../utils.h"
+#include "utils.h"
 #include "Polygon.h"
 
 #include <vector>

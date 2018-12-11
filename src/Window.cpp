@@ -13,8 +13,8 @@
 #include <stddef.h>
 #include <stdexcept>
 
-#include "2d/CircleParametrizer.h"
-#include "2d/Polygon.h"
+#include "CircleParametrizer.h"
+#include "Polygon.h"
 
 namespace param {
 class CircleParametrizer;
