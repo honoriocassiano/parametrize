@@ -145,9 +145,13 @@ void Window::Parametrize() {
 	if (!cp) {
 
 		if (originalPolygon) {
-			auto centroid = originalPolygon->GetCentroid();
 
-			cp = new CircleParametrizer(originalPolygon, 4, centroid, 4);
+			glm::vec2 center;
+			float radius;
+
+			originalPolygon->GetCircle(center, radius);
+
+			cp = new CircleParametrizer(originalPolygon, 8, center, radius * 2);
 		}
 	}
 

@@ -7,7 +7,10 @@
 
 #include "Polygon.h"
 
+#include <glm/detail/func_geometric.hpp>
 #include <GL/gl.h>
+#include <math.h>
+#include <stdio.h>
 
 namespace param {
 
@@ -15,16 +18,35 @@ Polygon::Polygon(glm::vec2* _vertices, std::size_t _size) :
 		vertices(_vertices), size(_size) {
 }
 
-glm::vec2 Polygon::GetCentroid() const {
+void Polygon::GetCircle(glm::vec2& center, float& radius) const {
 
-	float centroidX = 0, centroidY = 0;
+	float left, right, up, down;
+
+	left = down = INFINITY;
+	right = up = -INFINITY;
 
 	for (std::size_t i = 0; i < size; ++i) {
-		centroidX += vertices[i].x;
-		centroidY += vertices[i].y;
+		auto v = vertices[i];
+
+		if (v.x < left) {
+			left = v.x;
+		}
+
+		if (v.x > right) {
+			right = v.x;
+		}
+
+		if (v.y < down) {
+			down = v.y;
+		}
+
+		if (v.y > up) {
+			up = v.y;
+		}
 	}
 
-	return glm::vec2(centroidX / size, centroidY / size);
+	center = glm::vec2((right + left) / 2, (up + down) / 2);
+	radius = glm::length(glm::vec2(right, up) - center);
 }
 
 void Polygon::Draw(bool points) const {

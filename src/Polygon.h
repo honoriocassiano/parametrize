@@ -20,7 +20,7 @@ public:
 
 	void Draw(bool points = false) const;
 
-	glm::vec2 GetCentroid() const;
+	void GetCircle(glm::vec2& center, float& radius) const;
 
 	virtual ~Polygon();
 
