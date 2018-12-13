@@ -38,7 +38,7 @@ Window::Window(int _width, int _height) {
 
 	/* Initialize the library */
 	if (!glfwInit()) {
-		throw std::runtime_error("Error initiaizing GLFW!");
+		throw std::runtime_error("Error initializing GLFW!");
 	}
 }
 

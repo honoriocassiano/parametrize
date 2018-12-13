@@ -32,6 +32,7 @@ bool Ray2::Intersect(const glm::vec2& v1, const glm::vec2& v2, float& t,
 
 	auto origin = orig;
 
+	// Check if cast a vertex
 	{
 		auto alphaX = (v1.x - origin.x) / dir.x;
 		auto alphaY = (v1.y - origin.y) / dir.y;

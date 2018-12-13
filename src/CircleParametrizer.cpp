@@ -55,6 +55,11 @@ CircleParametrizer::~CircleParametrizer() {
 
 Polygon* CircleParametrizer::GetPolygon() {
 
+	if (!layers.size()
+			|| ((layers.size() == 1) && (layers.back().distances == nullptr))) {
+		return nullptr;
+	}
+
 	auto vertices = new glm::vec2[Count()];
 
 	for (std::size_t i = 0; i < Count(); ++i) {
@@ -116,6 +121,7 @@ void CircleParametrizer::Cast() {
 
 	auto& currentLayer = layers.back();
 
+	// Safe distance to start a ray
 	auto safeDistance = 2 * radius;
 	auto size = Size(layers.size() - 1);
 
@@ -132,33 +138,34 @@ void CircleParametrizer::Cast() {
 		for (std::size_t i = 0; i < size; ++i) {
 			ray.Set(currentLayer.vertices[i], currentLayer.normals[i]);
 
-			auto maxDistanceFront = INFINITY;
-			auto maxDistanceBack = -INFINITY;
-
-			// Cast current polygon
-			auto meshCasts = caster.Cast(ray, polygon);
-
-			// Get first cast on front and back
-			for (std::size_t j = 0; j < meshCasts.size(); ++j) {
-
-				auto d = meshCasts[j].distance;
-
-				// If distance is close to 0, consider as a front cast
-				if (d > -REL_TOL && d < maxDistanceFront) {
-					maxDistanceFront = d;
-				} else if (d < -REL_TOL && d > maxDistanceBack) {
-					maxDistanceBack = d;
-				}
-			}
-
-			maxDistanceFront += safeDistance + REL_TOL;
-			maxDistanceBack += safeDistance - REL_TOL;
+//			auto maxDistanceFront = INFINITY;
+//			auto maxDistanceBack = -INFINITY;
+//
+//			// Cast current polygon
+//			auto meshCasts = caster.Cast(ray, polygon);
+//
+//			// Get first cast on front and back
+//			for (std::size_t j = 0; j < meshCasts.size(); ++j) {
+//
+//				auto d = meshCasts[j].distance;
+//
+//				// If distance is close to 0, consider as a front cast
+//				if (d > -REL_TOL && d < maxDistanceFront) {
+//					maxDistanceFront = d;
+//				} else if (d < -REL_TOL && d > maxDistanceBack) {
+//					maxDistanceBack = d;
+//				}
+//			}
+//
+//			maxDistanceFront += safeDistance + REL_TOL;
+//			maxDistanceBack += safeDistance - REL_TOL;
 
 			bool inside;
 			std::size_t countBack = 0;
 			float lastDistance = INFINITY;
 			std::vector<CastEl> casts;
 
+			// Move ray origin to a safe point
 			ray.Set(
 					currentLayer.vertices[i]
 							+ (-(safeDistance) * currentLayer.normals[i]),
@@ -166,13 +173,17 @@ void CircleParametrizer::Cast() {
 
 			casts = caster.Cast(ray, mesh);
 
+			// Count casts behind real origin
 			while ((casts[countBack].distance < (safeDistance - REL_TOL))
 					&& (countBack < casts.size())) {
 				++countBack;
 			}
 
+			// If odd, point is inside the surface
 			inside = (countBack % 2);
 
+			// If inside, get first cast on back
+			// Else, first cast on front
 			if (inside) {
 				currentLayer.distances[i] = casts[countBack - 1].distance
 						- safeDistance;
