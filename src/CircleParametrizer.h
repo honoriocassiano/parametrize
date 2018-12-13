@@ -26,6 +26,8 @@ public:
 
 	Polygon* GetPolygon();
 
+	void Draw();
+
 	virtual float Parametrize();
 	void UnParametrize();
 

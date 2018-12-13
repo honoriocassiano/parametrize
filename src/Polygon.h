@@ -20,12 +20,21 @@ public:
 
 	void Draw(bool points = false) const;
 
-	void GetCircle(glm::vec2& center, float& radius) const;
+	void DrawBoundingRect() const;
+
+	void GetBoundingCircle(glm::vec2& center, float& radius) const;
 
 	virtual ~Polygon();
 
 	glm::vec2* vertices;
 	std::size_t size;
+
+private:
+	glm::vec2 bCircleCenter;
+	float bCircleRadius;
+
+	glm::vec2 bRectTopLeft;
+	glm::vec2 bRectBottomRight;
 };
 
 } /* namespace param */

@@ -48,6 +48,8 @@ private:
 private:
 
 	static bool drawing;
+	static bool showingBoundingRect;
+	static bool showingParametrizer;
 
 	static int width;
 	static int height;

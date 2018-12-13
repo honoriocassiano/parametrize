@@ -27,6 +27,8 @@ int Window::width = 0;
 int Window::height = 0;
 
 bool Window::drawing = true;
+bool Window::showingBoundingRect = false;
+bool Window::showingParametrizer = false;
 
 GLFWwindow* Window::window = nullptr;
 CircleParametrizer* Window::cp = nullptr;
@@ -108,6 +110,18 @@ void Window::KeyPressed(GLFWwindow * window, int key, int scancode, int action,
 			UnParametrize();
 			break;
 
+		case GLFW_KEY_C:
+			if (cp) {
+				showingParametrizer = !showingParametrizer;
+			}
+			break;
+
+		case GLFW_KEY_B:
+			if (originalPolygon) {
+				showingBoundingRect = !showingBoundingRect;
+			}
+			break;
+
 		case GLFW_KEY_ESCAPE:
 			glfwSetWindowShouldClose(window, GLFW_TRUE);
 			break;
@@ -138,6 +152,8 @@ void Window::ResetScene() {
 	}
 
 	drawing = true;
+	showingBoundingRect = false;
+	showingParametrizer = false;
 }
 
 void Window::Parametrize() {
@@ -149,9 +165,10 @@ void Window::Parametrize() {
 			glm::vec2 center;
 			float radius;
 
-			originalPolygon->GetCircle(center, radius);
+			originalPolygon->GetBoundingCircle(center, radius);
 
-			cp = new CircleParametrizer(originalPolygon, 8, center, radius * 2);
+			cp = new CircleParametrizer(originalPolygon, 8, center,
+					radius * 1.1);
 		}
 	}
 
@@ -222,7 +239,6 @@ void Window::Init() {
 	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-//	gluOrtho2D(-5.0, 5.0, -5.0, 5.0);
 	gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -242,6 +258,11 @@ void Window::Render() {
 		if (originalPolygon) {
 			glColor3f(0.5, 0.5, 0.5);
 			originalPolygon->Draw();
+
+			if (showingBoundingRect) {
+				glColor3f(0, 0, 1);
+				originalPolygon->DrawBoundingRect();
+			}
 		}
 
 		if (parametrizedPolygon) {
@@ -250,6 +271,10 @@ void Window::Render() {
 
 			glColor3f(1, 0, 0);
 			parametrizedPolygon->Draw(true);
+		}
+
+		if (showingParametrizer) {
+			cp->Draw();
 		}
 	}
 

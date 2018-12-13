@@ -7,13 +7,15 @@
 
 #include "CircleParametrizer.h"
 
+#include <glm/detail/func_geometric.hpp>
+#include <glm/detail/type_vec2.hpp>
+#include <GL/gl.h>
+#include <cmath>
+#include <cstddef>
+
+#include "defaults.h"
 #include "Ray2.h"
 #include "Raycaster2.h"
-#include "utils.h"
-
-#include <stdio.h>
-#include <cmath>
-#include <glm/geometric.hpp>
 
 namespace param {
 
@@ -118,11 +120,34 @@ std::size_t CircleParametrizer::Size(std::size_t level) const {
 	return (level == 0) ? numRays : (1 << (level - 1)) * numRays;
 }
 
+void CircleParametrizer::Draw() {
+
+	glPointSize(7.5);
+	glColor3f(0, 1, 0);
+
+	glBegin(GL_POINTS);
+	glVertex2f(center.x, center.y);
+	glEnd();
+
+	auto numVertices = 45;
+	auto step = 1.0f / numVertices;
+
+	glBegin(GL_LINE_LOOP);
+	for (auto i = 0; i < numVertices; ++i) {
+
+		float u = (-i * step) * 2 * M_PI;
+
+		glVertex2f(radius * cos(u) + center.x, radius * sin(u) + center.y);
+	}
+
+	glEnd();
+}
+
 void CircleParametrizer::Cast() {
 
 	auto& currentLayer = layers.back();
 
-	// Safe distance to start a ray
+// Safe distance to start a ray
 	auto safeDistance = 2 * radius;
 	auto size = Size(layers.size() - 1);
 
@@ -138,28 +163,6 @@ void CircleParametrizer::Cast() {
 
 		for (std::size_t i = 0; i < size; ++i) {
 			ray.Set(currentLayer.vertices[i], currentLayer.normals[i]);
-
-//			auto maxDistanceFront = INFINITY;
-//			auto maxDistanceBack = -INFINITY;
-//
-//			// Cast current polygon
-//			auto meshCasts = caster.Cast(ray, polygon);
-//
-//			// Get first cast on front and back
-//			for (std::size_t j = 0; j < meshCasts.size(); ++j) {
-//
-//				auto d = meshCasts[j].distance;
-//
-//				// If distance is close to 0, consider as a front cast
-//				if (d > -REL_TOL && d < maxDistanceFront) {
-//					maxDistanceFront = d;
-//				} else if (d < -REL_TOL && d > maxDistanceBack) {
-//					maxDistanceBack = d;
-//				}
-//			}
-//
-//			maxDistanceFront += safeDistance + REL_TOL;
-//			maxDistanceBack += safeDistance - REL_TOL;
 
 			bool inside;
 			std::size_t countBack = 0;
@@ -286,7 +289,7 @@ float CircleParametrizer::Parametrize() {
 
 	Cast();
 
-	// TODO Return some value
+// TODO Return some value
 	return 0;
 
 }

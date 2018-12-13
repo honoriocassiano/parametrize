@@ -16,37 +16,38 @@ namespace param {
 
 Polygon::Polygon(glm::vec2* _vertices, std::size_t _size) :
 		vertices(_vertices), size(_size) {
-}
 
-void Polygon::GetCircle(glm::vec2& center, float& radius) const {
+	float left, right, top, bottom;
 
-	float left, right, up, down;
+	left = right = vertices[0].x;
+	bottom = top = vertices[0].y;
 
-	left = down = INFINITY;
-	right = up = -INFINITY;
-
-	for (std::size_t i = 0; i < size; ++i) {
+	for (std::size_t i = 1; i < size; ++i) {
 		auto v = vertices[i];
 
 		if (v.x < left) {
 			left = v.x;
-		}
-
-		if (v.x > right) {
+		} else if (v.x > right) {
 			right = v.x;
 		}
 
-		if (v.y < down) {
-			down = v.y;
-		}
-
-		if (v.y > up) {
-			up = v.y;
+		if (v.y < bottom) {
+			bottom = v.y;
+		} else if (v.y > top) {
+			top = v.y;
 		}
 	}
 
-	center = glm::vec2((right + left) / 2, (up + down) / 2);
-	radius = glm::length(glm::vec2(right, up) - center);
+	bRectTopLeft = glm::vec2(left, top);
+	bRectBottomRight = glm::vec2(right, bottom);
+
+	bCircleCenter = glm::vec2((right + left) / 2, (top + bottom) / 2);
+	bCircleRadius = glm::length(glm::vec2(right, top) - bCircleCenter);
+}
+
+void Polygon::GetBoundingCircle(glm::vec2& center, float& radius) const {
+	center = bCircleCenter;
+	radius = bCircleRadius;
 }
 
 void Polygon::Draw(bool points) const {
@@ -61,6 +62,17 @@ void Polygon::Draw(bool points) const {
 	for (std::size_t i = 0; i < size; ++i) {
 		glVertex2f(vertices[i].x, vertices[i].y);
 	}
+
+	glEnd();
+}
+
+void Polygon::DrawBoundingRect() const {
+	glBegin(GL_LINE_LOOP);
+
+	glVertex2f(bRectTopLeft.x, bRectTopLeft.y);
+	glVertex2f(bRectTopLeft.x, bRectBottomRight.y);
+	glVertex2f(bRectBottomRight.x, bRectBottomRight.y);
+	glVertex2f(bRectBottomRight.x, bRectTopLeft.y);
 
 	glEnd();
 }
