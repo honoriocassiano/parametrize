@@ -27,8 +27,12 @@ float cross(const glm::vec2& v1, const glm::vec2& v2) {
 namespace param {
 
 bool closeto(float v1, float v2, float rtol, float atol) {
-	return fabs(v1 - v2)
-			<= std::max(rtol * std::max(abs(v1), abs(v2)), atol);
+
+	if (abs(v1) == INFINITY || abs(v2) == INFINITY) {
+		return false;
+	}
+
+	return fabs(v1 - v2) <= std::max(rtol * std::max(abs(v1), abs(v2)), atol);
 }
 
 VertexIndex GetByPosition(const std::vector<VertexHolder>& layers,
