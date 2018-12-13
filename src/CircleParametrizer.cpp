@@ -33,7 +33,8 @@ CircleParametrizer::CircleParametrizer(Polygon* _mesh, std::size_t size,
 
 		float u = (-i * step) * 2 * M_PI;
 
-		vertices[i] = glm::vec2(radius * cos(u), radius * sin(u));
+		vertices[i] = glm::vec2(radius * cos(u) + center.x,
+				radius * sin(u) + center.y);
 		normals[i] = glm::normalize(center - vertices[i]);
 		actives[i] = true;
 	}
