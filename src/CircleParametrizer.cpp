@@ -113,246 +113,99 @@ std::size_t CircleParametrizer::Size(std::size_t level) const {
 }
 
 void CircleParametrizer::Cast() {
-	auto& ref = layers.back();
-	// Calc distances
+
+	auto& currentLayer = layers.back();
+
+	auto safeDistance = 2 * radius;
+	auto size = Size(layers.size() - 1);
+
 	glm::vec2 origin, direction;
 
 	Ray2 ray(origin, direction);
 	Raycaster2 caster;
 
-	auto size = Size(layers.size() - 1);
+	currentLayer.distances = new float[size];
 
-	float* newDistances = new float[size];
-	glm::vec2* newVertices = new glm::vec2[size];
+	if (layers.size() > 1) {
+		auto polygon = GetPolygon();
 
-	ref.distances = new float[size];
+		for (std::size_t i = 0; i < size; ++i) {
+			ray.Set(currentLayer.vertices[i], currentLayer.normals[i]);
 
-	auto polygon = GetPolygon();
-	auto current = layers.back();
+			auto maxDistanceFront = INFINITY;
+			auto maxDistanceBack = -INFINITY;
 
-	auto safeDistance = 2 * radius;
+			// Cast current polygon
+			auto meshCasts = caster.Cast(ray, polygon);
 
-	for (std::size_t i = 0; i < size; ++i) {
+			// Get first cast on front and back
+			for (std::size_t j = 0; j < meshCasts.size(); ++j) {
 
-		ray.Set(current.vertices[i], current.normals[i]);
-//		ray.Set(current.vertices[i] + (-safeDistance * current.normals[i]),
-//				current.normals[i]);
+				auto d = meshCasts[j].distance;
 
-//		printf("%f %f\n", current.vertices[i].x, current.vertices[i].y);
-//		printf("%f %f\n", current.normals[i].x, current.normals[i].y);
-//		printf("\n");
-
-		auto maxDistanceFront = INFINITY;
-		auto maxDistanceBack = -INFINITY;
-
-		auto meshCasts = caster.Cast(ray, polygon);
-
-		ray.Set(current.vertices[i] + (-(safeDistance) * current.normals[i]),
-				current.normals[i]);
-
-		for (std::size_t j = 0; j < meshCasts.size(); ++j) {
-			auto d = meshCasts[j].distance;
-
-//			if (closeto(d, 0)) {
-//				// TODO IGNORE IT ALL
-//				current.distances[i] = 0;
-//
-//				break;
-//			} else {
-
-			if (d > -REL_TOL && d < maxDistanceFront) {
-				maxDistanceFront = d + REL_TOL;
-			} else if (d < -REL_TOL && d > maxDistanceBack) {
-				maxDistanceBack = d + REL_TOL;
+				// If distance is close to 0, consider as a front cast
+				if (d > -REL_TOL && d < maxDistanceFront) {
+					maxDistanceFront = d;
+				} else if (d < -REL_TOL && d > maxDistanceBack) {
+					maxDistanceBack = d;
+				}
 			}
-		}
 
-//		auto casts = caster.Cast(ray, mesh, maxDistanceFront, maxDistanceBack);
-		auto casts = caster.Cast(ray, mesh);
+			maxDistanceFront += safeDistance + REL_TOL;
+			maxDistanceBack += safeDistance - REL_TOL;
 
-//		for (const auto& c : casts) {
-//			printf("%f %f %f\n", c.distance, maxDistanceFront, maxDistanceBack);
-//		}
-		//*************************************************************
+			bool inside;
+			std::size_t countBack = 0;
+			float lastDistance = INFINITY;
+			std::vector<CastEl> casts;
 
-		//			std::size_t countBack = 0;
-		std::size_t countFront = 0;
-		float lastDistance = INFINITY;
-		bool testOrientation = false;
+			ray.Set(
+					currentLayer.vertices[i]
+							+ (-(safeDistance) * currentLayer.normals[i]),
+					currentLayer.normals[i]);
 
-//		while ((casts[countBack].distance < safeDistance)
-//				&& (countBack < casts.size())) {
-//			++countBack;
-//
-//			if(closeto(casts[countBack].u, round(casts[countBack].u))) {
-//				++duplicated;
-//			}
-//		}
+			casts = caster.Cast(ray, mesh);
 
-		std::vector<CastEl> realCasts;
-
-		// Filter casts with vertices
-		for (auto cast : casts) {
-
-//			printf("cast: %f %f\n", cast.distance, lastDistance);
-
-			if (!closeto(cast.distance, lastDistance)) {
-
-				lastDistance = cast.distance;
-
-				cast.distance -= safeDistance;
-
-				realCasts.push_back(cast);
+			while ((casts[countBack].distance < (safeDistance - REL_TOL))
+					&& (countBack < casts.size())) {
+				++countBack;
 			}
-		}
 
-		{
+			inside = (countBack % 2);
 
-			while ((realCasts[realCasts.size() - countFront - 1].distance
-					> -REL_TOL) && (countFront < realCasts.size())) {
-				++countFront;
-			}
-		}
-
-//		for (const auto& cast : casts) {
-//
-////			if (casts[countBack].distance < safeDistance) {
-//			if (cast.distance < safeDistance) {
-//				++countBack;
-//			}
-//
-//			if (closeto(cast.distance, lastDistance)) {
-//				++duplicated;
-//				lastDistance = cast.distance;
-//			}
-//
-////			if (closeto(casts[countBack].u, round(casts[countBack].u))) {
-////				++duplicated;
-////			}
-//		}
-
-//		auto castSize = casts.size() - duplicated;
-		auto castSize = realCasts.size();
-
-		//			bool outside = (countBack % 2);
-//		bool inside = ((realCasts.size() - countFront) % 2);
-		bool inside = countFront % 2;
-
-//		if (testOrientation) {
-//			inside = !realCasts[countBack - 1].in;
-////			outside = (countBack % 2);
-//		}
-
-//		printf("%lu, %lu\n", countFront, realCasts.size());
-//
-////		if(countBack == 2) {
-//		for (auto c : realCasts) {
-//			printf("%e\n", c.distance);
-//		}
-//		printf("\n");
-//		}
-
-		if (inside) {
-
-			printf("INSIDE!\n");
-			printf("%lu %lu %lu\n", countFront, casts.size(), realCasts.size());
-			printf("%f %f\n", current.vertices[i].x, current.vertices[i].y);
-
-//			for(auto& c: realCasts) {
-//				printf("%f\n", c.distance);
-//			}
-
-//		if (inside || (!inside && countBack == realCasts.size())) {
-			//				current.distances[i] = casts[countBack].distance;
-//			current.distances[i] = realCasts[countFront - 1].distance;
-
-			current.distances[i] =
-					realCasts[realCasts.size() - countFront - 1].distance;
-
-			//				printf("FIRST\n");
-		} else {
-
-//			current.distances[i] = realCasts[0].distance;
-			if (countFront < realCasts.size()) {
-				current.distances[i] = realCasts[countFront].distance;
+			if (inside) {
+				currentLayer.distances[i] = casts[countBack - 1].distance
+						- safeDistance;
 			} else {
-				current.distances[i] = realCasts[0].distance;
+				currentLayer.distances[i] = casts[countBack].distance
+						- safeDistance;
+			}
+		}
+	} else if (layers.size() == 1) {
+		for (std::size_t i = 0; i < size; ++i) {
+
+			std::size_t castSize = 0;
+			float lastDistance = INFINITY;
+			std::vector<CastEl> casts;
+
+			ray.Set(currentLayer.vertices[i], currentLayer.normals[i]);
+			casts = caster.Cast(ray, mesh);
+
+			// Filter casts with vertices
+			for (auto cast : casts) {
+				if (!closeto(cast.distance, lastDistance)) {
+
+					casts.push_back(cast);
+
+					lastDistance = cast.distance;
+				}
 			}
 
-//			current.distances[i] =
-
-//			printf("%lu, %lu\n", countBack, realCasts.size());
-
-			//				current.distances[i] = casts[countBack - 1].distance;
-			//				current.distances[i] = 1;
-			//				printf("SECOND\n");
-
-			//				printf("%f\n", casts[countBack - 1].distance);
-
-			//				printf("%f %f\n", current.vertices[i].x,
-			//						current.vertices[i].y);
-			//				for (const auto& c : casts) {
-			//					printf("%f\n", c.distance);
-			//				}
-
+			currentLayer.distances[i] = casts[0].distance;
 		}
-
-		//			printf("%f %f\n", current.vertices[i].x, current.vertices[i].y);
-		//			printf("%f %f\n", current.normals[i].x, current.normals[i].y);
-//		printf("%f\n", current.distances[i]);
-		printf("\n");
-
-		//*************************************************************
-
-//		if (closeto(casts[0].distance, 0)) {
-//			current.distances[i] = 0;
-//		} else {
-////			std::size_t countBack = 0;
-//			std::size_t countBack = 0;
-//
-//			while ((casts[countBack].distance < 0) && (countBack < casts.size())) {
-//				++countBack;
-//			}
-//
-////			bool outside = (countBack % 2);
-//			bool outside = ((casts.size() - countBack) % 2);
-//
-//			if (outside) {
-////				current.distances[i] = casts[countBack].distance;
-//				current.distances[i] = casts[countBack - 1].distance;
-//
-////				printf("FIRST\n");
-//			} else {
-//
-////				printf("%lu\n", casts.size());
-//
-//				current.distances[i] = casts[countBack].distance;
-////				current.distances[i] = casts[countBack - 1].distance;
-////				current.distances[i] = 1;
-////				printf("SECOND\n");
-//
-////				printf("%f\n", casts[countBack - 1].distance);
-//
-////				printf("%f %f\n", current.vertices[i].x,
-////						current.vertices[i].y);
-////				for (const auto& c : casts) {
-////					printf("%f\n", c.distance);
-////				}
-//
-//			}
-//
-////			printf("%f %f\n", current.vertices[i].x, current.vertices[i].y);
-////			printf("%f %f\n", current.normals[i].x, current.normals[i].y);
-//			printf("%f\n", current.distances[i]);
-//			printf("\n");
-//		}
-
-//		if (casts.size() > 0) {
-//			current.distances[i] = casts[0].distance;
-//		}
+	} else {
+		return;
 	}
-
-//	printf("\n");
 }
 
 void CircleParametrizer::UnParametrize() {

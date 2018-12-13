@@ -1,7 +1,6 @@
 #include <glm/detail/type_vec.hpp>
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include <X11/X.h>
 #include <cstddef>
 
 #include "CircleParametrizer.h"
@@ -39,6 +38,9 @@ int main(int argc, char const *argv[]) {
 	param::Window window(w, h);
 
 	window.Run();
+
+//	printf("%f\n", -INFINITY);
+//	printf("%d\n", closeto(3, INFINITY));
 
 	return 0;
 }
