@@ -39,8 +39,5 @@ int main(int argc, char const *argv[]) {
 
 	window.Run();
 
-//	printf("%f\n", -INFINITY);
-//	printf("%d\n", closeto(3, INFINITY));
-
 	return 0;
 }

@@ -237,7 +237,6 @@ void CircleParametrizer::UnParametrize() {
 float CircleParametrizer::Parametrize() {
 
 	if (layers.back().distances) {
-		// Create child
 		auto& ref = layers.back();
 		auto count = Count();
 
@@ -246,10 +245,7 @@ float CircleParametrizer::Parametrize() {
 		Ray2 ray(origin, direction);
 		Raycaster2 caster;
 
-		float* newDistances = new float[count];
-		glm::vec2* newNormals = new glm::vec2[count];
 		glm::vec2* newVertices = new glm::vec2[count];
-//		bool* newActives = new bool[count];
 
 		auto currentPos = GetByPosition(layers, 0);
 
@@ -271,14 +267,14 @@ float CircleParametrizer::Parametrize() {
 			currentPos = nextPos;
 		}
 
-		layers.emplace_back(newVertices, nullptr, newDistances);
+		layers.emplace_back(newVertices, nullptr, nullptr);
 
 		ComputeNormals();
 	}
 
 	Cast();
 
-// TODO Return some value
+	// TODO Return some value
 	return 0;
 
 }

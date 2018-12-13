@@ -25,38 +25,6 @@ void Ray2::Set(const glm::vec2& origin, const glm::vec2& direction) {
 	dir = direction;
 }
 
-float Ray2::Intersect(const glm::vec2& v1, const glm::vec2& v2) const {
-	auto r = v2 - v1;
-
-	auto u = NAN;
-
-	auto origin = orig;
-
-	{
-		auto alphaX = (v1.x - origin.x) / dir.x;
-		auto alphaY = (v1.y - origin.y) / dir.y;
-
-		auto betaX = (v2.x - origin.x) / dir.x;
-		auto betaY = (v2.y - origin.y) / dir.y;
-
-		// Move the origin if cast a vertex
-		if (closeto(alphaX, alphaY) || closeto(betaX, betaY)) {
-			origin.y += 2 * REL_TOL;
-		}
-	}
-
-	if (!(closeto(cross(r, dir), 0) && !closeto(cross((v1 - origin), r), 0))) {
-		auto t1 = cross((origin - v1), dir) / cross(r, dir);
-		auto t2 = cross((v1 - origin), r) / cross(dir, r);
-
-		if ((t1 >= 0) && (t1 <= 1) && (t2 >= 0)) {
-			u = t2;
-		}
-	}
-
-	return u;
-}
-
 bool Ray2::Intersect(const glm::vec2& v1, const glm::vec2& v2, float& t,
 		float& u) const {
 

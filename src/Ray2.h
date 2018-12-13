@@ -24,7 +24,6 @@ public:
 
 	bool Intersect(const glm::vec2& v1, const glm::vec2& v2, float& t,
 			float& u) const;
-	float Intersect(const glm::vec2& v1, const glm::vec2& v2) const;
 
 	glm::vec2 GetDirection() const;
 	glm::vec2 GetOrigin() const;
