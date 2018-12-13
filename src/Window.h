@@ -8,6 +8,10 @@
 #ifndef WINDOW_H_
 #define WINDOW_H_
 namespace param {
+class PartialPolygon;
+} /* namespace param */
+
+namespace param {
 class CircleParametrizer;
 } /* namespace param */
 
@@ -34,17 +38,27 @@ private:
 	static void Parametrize();
 	static void UnParametrize();
 
+	static void MouseClick(GLFWwindow* window, int button, int action,
+			int mods);
+
 	void Init();
 
-public:
+	void Render();
 
-	static GLFWwindow* window;
+private:
+
+	static bool drawing;
+
 	static int width;
 	static int height;
+
+	static GLFWwindow* window;
 
 	static Polygon* originalPolygon;
 	static Polygon* parametrizedPolygon;
 	static CircleParametrizer* cp;
+
+	static PartialPolygon partialPolygon;
 };
 
 } /* namespace param */

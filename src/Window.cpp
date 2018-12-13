@@ -14,6 +14,7 @@
 #include <stdexcept>
 
 #include "CircleParametrizer.h"
+#include "PartialPolygon.h"
 #include "Polygon.h"
 
 namespace param {
@@ -25,11 +26,14 @@ namespace param {
 int Window::width = 0;
 int Window::height = 0;
 
+bool Window::drawing = true;
+
 GLFWwindow* Window::window = nullptr;
 CircleParametrizer* Window::cp = nullptr;
 
 Polygon* Window::originalPolygon = nullptr;
 Polygon* Window::parametrizedPolygon = nullptr;
+PartialPolygon Window::partialPolygon = PartialPolygon();
 
 Window::Window(int _width, int _height) {
 
@@ -76,25 +80,8 @@ void Window::Run() {
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window)) {
-		/* Render here */
-		glClear(GL_COLOR_BUFFER_BIT);
 
-		if (originalPolygon) {
-			glColor3f(0.5, 0.5, 0.5);
-			originalPolygon->Draw();
-		}
-
-		if (parametrizedPolygon) {
-			glColor3f(1, 1, 1);
-			parametrizedPolygon->Draw();
-
-			glColor3f(1, 0, 0);
-			parametrizedPolygon->Draw(true);
-		}
-
-		/* Swap front and back buffers */
-		glfwSwapBuffers(window);
-
+		Render();
 		/* Poll for and process events */
 		glfwPollEvents();
 	}
@@ -114,7 +101,7 @@ void Window::KeyPressed(GLFWwindow * window, int key, int scancode, int action,
 			break;
 
 		case GLFW_KEY_E:
-//			ResetScene();
+			ResetScene();
 			break;
 
 		case GLFW_KEY_U:
@@ -124,18 +111,40 @@ void Window::KeyPressed(GLFWwindow * window, int key, int scancode, int action,
 		case GLFW_KEY_ESCAPE:
 			glfwSetWindowShouldClose(window, GLFW_TRUE);
 			break;
-
 		}
-
 	}
 }
 
 void Window::ResetScene() {
-	delete cp;
-	delete originalPolygon;
+
+	partialPolygon.Clear();
+
+	if (!drawing) {
+		if (cp) {
+			delete cp;
+		}
+
+		if (originalPolygon) {
+			delete originalPolygon;
+		}
+
+		if (parametrizedPolygon) {
+			delete parametrizedPolygon;
+		}
+
+		cp = nullptr;
+		originalPolygon = nullptr;
+		parametrizedPolygon = nullptr;
+	}
+
+	drawing = true;
 }
 
 void Window::Parametrize() {
+
+	if (!cp) {
+		cp = new CircleParametrizer(originalPolygon, 4, glm::vec2(), 4);
+	}
 
 	if (parametrizedPolygon) {
 		delete parametrizedPolygon;
@@ -166,15 +175,77 @@ void Window::UnParametrize() {
 	}
 }
 
+void Window::MouseClick(GLFWwindow* window, int button, int action, int mods) {
+
+	if (drawing) {
+		if (action == GLFW_PRESS) {
+			if (button == GLFW_MOUSE_BUTTON_LEFT) {
+				if (!partialPolygon.IsClosed()) {
+
+					double windowX, windowY;
+					double worldX, worldY;
+
+					glfwGetCursorPos(window, &windowX, &windowY);
+
+					// Convert window to world coordinates
+					worldX = 2 * ((windowX - width / 2) / width);
+					worldY = 2 * (((height - windowY) - height / 2) / height);
+
+					partialPolygon.AddVertex(glm::vec2(worldX, worldY));
+				}
+			} else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
+				bool closed = partialPolygon.Close();
+
+				if (closed) {
+
+					originalPolygon = partialPolygon.GetPolygon();
+
+					drawing = false;
+				} else {
+					printf("Cannot close the polygon!\n");
+				}
+			}
+		}
+	}
+}
+
 void Window::Init() {
 	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluOrtho2D(-5.0, 5.0, -5.0, 5.0);
+//	gluOrtho2D(-5.0, 5.0, -5.0, 5.0);
+	gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
 	glfwSetKeyCallback(window, KeyPressed);
+	glfwSetMouseButtonCallback(window, MouseClick);
+}
+
+void Window::Render() {
+	/* Render here */
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	if (drawing) {
+		glColor3f(1, 1, 1);
+		partialPolygon.Draw();
+	} else {
+		if (originalPolygon) {
+			glColor3f(0.5, 0.5, 0.5);
+			originalPolygon->Draw();
+		}
+
+		if (parametrizedPolygon) {
+			glColor3f(1, 1, 1);
+			parametrizedPolygon->Draw();
+
+			glColor3f(1, 0, 0);
+			parametrizedPolygon->Draw(true);
+		}
+	}
+
+	/* Swap front and back buffers */
+	glfwSwapBuffers(window);
 }
 
 } /* namespace param */
