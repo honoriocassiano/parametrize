@@ -143,7 +143,12 @@ void Window::ResetScene() {
 void Window::Parametrize() {
 
 	if (!cp) {
-		cp = new CircleParametrizer(originalPolygon, 4, glm::vec2(), 4);
+
+		if (originalPolygon) {
+			auto centroid = originalPolygon->GetCentroid();
+
+			cp = new CircleParametrizer(originalPolygon, 4, centroid, 4);
+		}
 	}
 
 	if (parametrizedPolygon) {

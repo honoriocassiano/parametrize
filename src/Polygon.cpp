@@ -15,6 +15,18 @@ Polygon::Polygon(glm::vec2* _vertices, std::size_t _size) :
 		vertices(_vertices), size(_size) {
 }
 
+glm::vec2 Polygon::GetCentroid() const {
+
+	float centroidX = 0, centroidY = 0;
+
+	for (std::size_t i = 0; i < size; ++i) {
+		centroidX += vertices[i].x;
+		centroidY += vertices[i].y;
+	}
+
+	return glm::vec2(centroidX / size, centroidY / size);
+}
+
 void Polygon::Draw(bool points) const {
 
 	if (points) {
@@ -36,3 +48,4 @@ Polygon::~Polygon() {
 }
 
 } /* namespace param */
+

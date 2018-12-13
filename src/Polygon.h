@@ -20,6 +20,8 @@ public:
 
 	void Draw(bool points = false) const;
 
+	glm::vec2 GetCentroid() const;
+
 	virtual ~Polygon();
 
 	glm::vec2* vertices;
